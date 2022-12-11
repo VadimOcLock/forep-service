@@ -1,0 +1,143 @@
+package ru.fortum.forep.calculator.controllers
+
+import java.io.FileInputStream
+
+import ru.fortum.forep.calculator.models.Data
+
+class CsvParser(val data: Data = Data()) {
+
+    // region api
+    open fun parse(name: String, stream: FileInputStream) {
+
+        if (name.contains(AttrName)) {
+            if (!data.attrs.isNullOrEmpty()) return
+            data.attrs = parseAttr(stream)
+        } else if (name.contains(FqrName01)){
+            if (!data.fqrs01.isNullOrEmpty()) return
+            data.fqrs01 = parseFqr01(stream)
+        } else if (name.contains(FqrName10)) {
+            if (!data.fqrs10.isNullOrEmpty()) return
+            data.fqrs10 = parseFqr10(stream)
+        } else if (name.contains(FqrName11)) {
+            if (!data.fqrs11.isNullOrEmpty()) return
+            data.fqrs11 = parseFqr11(stream)
+        }
+    }
+
+    // endregion
+    companion object {
+        // region const:
+        const val AttrName :String= "FOR_QLIK_BUKRS_ATTR_PBW"
+        const val FqrName01 :String= "FOR_QLIK_R01_PBW"
+        const val FqrName10:String= "FOR_QLIK_R10_PBW"
+        const val FqrName11:String= "FOR_QLIK_R11_PBW"
+        // endregion
+        // attr:
+        fun parseAttr(stream : FileInputStream): List<ru.fortum.forep.calculator.models.AttrModel>
+        {
+            var result = mutableListOf<ru.fortum.forep.calculator.models.AttrModel>()
+            parseStream(stream) { index, line -> result.add(parseAttrLine(index, line)) }
+
+            return result
+        }
+        fun parseAttrLine(i: Int, line : String): ru.fortum.forep.calculator.models.AttrModel
+        {
+            var l = line.split(";")
+            return ru.fortum.forep.calculator.models.AttrModel(
+                index = i,
+                //
+                compCode = l[0].toInt(),
+                dateFrom = l[1].toInt(),
+                dateTo = l[2].toInt(),
+                postalCd = l[3],
+                city = l[4],
+                zacInn = l[6],
+                zacOgrn = l[8],
+                zacOkpg = l[13],
+                zacOktmo = l[15],
+                zqtext1 = l[18],
+                zqtext2 = l[19],
+                zqtext3 = l[20],
+                zqtext4 = l[21],
+            )
+        }
+        // fqr01:
+        fun parseFqr01(stream: FileInputStream): List<ru.fortum.forep.calculator.models.FqrModel01> {
+            var result = mutableListOf<ru.fortum.forep.calculator.models.FqrModel01>()
+            parseStream(stream) { index, line -> result.add(parseFqrLine01(index, line)); }
+
+            return result
+        }
+
+        fun parseFqrLine01(index: Int, line: String): ru.fortum.forep.calculator.models.FqrModel01 {
+            var l = line.split(";")
+            return ru.fortum.forep.calculator.models.FqrModel01(
+                compCode = l[0].toInt(),
+                fiscPer = l[1].toInt(),
+                fiscVarnt = l[2],
+                persArea = l[3],
+                zimonIntRv = l[4].toInt(),
+                zperNum = l[5].toInt(),
+                ztypeKf = l[6],
+                zpersQty = l[7].toDouble(),
+                zwrkHrs = l[8].toDouble()
+            )
+        }
+        // fqr10:
+        fun parseFqr10(stream : FileInputStream) : List<ru.fortum.forep.calculator.models.FqrModel10>
+        {
+            var result = mutableListOf<ru.fortum.forep.calculator.models.FqrModel10>()
+            parseStream(stream) { index, line -> result.add(parseFqrLine10(index, line)); }
+
+            return result
+        }
+        fun parseFqrLine10(i: Int, line: String): ru.fortum.forep.calculator.models.FqrModel10
+        {
+            var l = line.split(";")
+            return ru.fortum.forep.calculator.models.FqrModel10(
+                index = i,
+                //
+                zrepNum = l[0].toInt(),
+                fiscYear = l[1].toInt(),
+                compCode = l[2].toInt(),
+                ztypeKf = l[3],
+                amount = l[4].toDouble(),
+            )
+        }
+        // fqr11:
+        fun parseFqr11(stream:FileInputStream):List<ru.fortum.forep.calculator.models.FqrModel11>
+        {
+            var result = mutableListOf<ru.fortum.forep.calculator.models.FqrModel11>()
+            parseStream(stream) { index, line -> result.add(parseFqrLine11(index, line)); }
+
+            return result;
+        }
+        fun parseFqrLine11(i: Int,  line: String): ru.fortum.forep.calculator.models.FqrModel11
+        {
+            var l = line.split(";")
+            return ru.fortum.forep.calculator.models.FqrModel11(
+                index = i,
+                //
+                zrepNum = l[0].toInt(),
+                fiscYear = l[1].toInt(),
+                fiscPer = l[2].toInt(),
+                compCode = l[3].toInt(),
+                ztypeKf = l[4],
+                amount = l[5].toDouble(),
+            )
+        }
+        // region utils
+        inline fun parseStream(stream: FileInputStream, crossinline act:(Int, String) -> Unit): Boolean
+        {
+            var i = 0
+            stream.reader().forEachLine {
+                if (i == 0)
+                    i++
+                else
+                    act(i++, it)
+            }
+            return true;
+        }
+        // endregion
+    }
+}

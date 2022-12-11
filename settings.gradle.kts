@@ -1,0 +1,1 @@
+rootProject.name = "ru.fortum.forep.forep-service"
