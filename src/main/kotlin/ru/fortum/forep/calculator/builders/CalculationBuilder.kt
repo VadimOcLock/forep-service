@@ -106,7 +106,8 @@ class Fqr01(data: Data,
     }
 
     fun getZpersQty1(ztypeKf: String?, fiscPerMCount: Int) : Double {
-        val fiscPer = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0MM")).toInt() - fiscPerMCount
+        var fiscPer = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0MM")).toInt() - fiscPerMCount
+//        fiscPer = 2022009
         var result = _models.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
             it.fiscPer == fiscPer
@@ -123,7 +124,8 @@ class Fqr01(data: Data,
         return result
     }
     fun getZpersQty3(ztypeKf: String?, fiscPerMCount: Int, bus: List<Int>) : Double {
-        val fiscPer = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0MM")).toInt() - fiscPerMCount
+        var fiscPer = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0MM")).toInt() - fiscPerMCount
+//        fiscPer = 2022009
         var result = _models.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
             it.fiscPer == fiscPer &&
@@ -133,7 +135,8 @@ class Fqr01(data: Data,
         return result
     }
     fun getZwrkHrs(ztypeKf: String?, fiscPerMCount: Int) : Double {
-        val fiscPer = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0MM")).toInt() - fiscPerMCount
+        var fiscPer = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0MM")).toInt() - fiscPerMCount
+//        fiscPer = 2022009
         var result = _models.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
             it.fiscPer == fiscPer

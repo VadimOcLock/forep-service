@@ -38,6 +38,7 @@ class ReportController(private val _reportBuilder: ReportBuilder = ReportBuilder
         }
         catch (e: Exception)
         {
+            println(e.message)
             println("error!")
             //Logger.Error(e.ToString());
         }

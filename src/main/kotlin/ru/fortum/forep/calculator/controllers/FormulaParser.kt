@@ -116,15 +116,19 @@ class FormulaParser(calculation: CalculationBuilder,
                 var parameters = (parseParameters(m.parameters) ?: return null).toMutableList()
                 parameters[1] = parameters[1].replace("{", "")
                 parameters[parameters.size - 1] = parameters[parameters.size - 1].replace("}", "")
-                var bus = parameters.filter { !it.equals(parameters[0], true) }.map { it.toInt() }
+                var bus = parameters.filter { it != parameters[0] }.map { it.toInt() }
 
-                return _calculation.fqr01.getZpersQty2(parameters[0], bus);
+                return _calculation.fqr01.getZpersQty2(parameters[0], bus)
             }
-//            if (m.execMethod.equals("zpersqty3"))
-//            {
-//                var parameters = parseParameters(m.parameters) ?: return null
-//                return _calculation.fqr01.getZpersQty3(parameters);
-//            }
+            if (m.execMethod.equals("zpersqty3"))
+            {
+                var parameters = (parseParameters(m.parameters) ?: return null).toMutableList()
+                parameters[2] = parameters[2].replace("{", "")
+                parameters[parameters.size - 1] = parameters[parameters.size - 1].replace("}", "")
+                var bus = parameters.filter { it != parameters[0] && it != parameters[1] }.map { it.toInt() }
+
+                return _calculation.fqr01.getZpersQty3(parameters[0], parameters[1].toInt(), bus)
+            }
             if (m.execMethod.equals("zwrkhrs"))
             {
                 var parameters = parseParameters(m.parameters) ?: return null
