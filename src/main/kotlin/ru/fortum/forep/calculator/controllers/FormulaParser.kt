@@ -111,11 +111,15 @@ class FormulaParser(calculation: CalculationBuilder,
                 var parameters = parseParameters(m.parameters) ?: return null
                 return _calculation.fqr01.getZpersQty1(parameters[0], parameters[1].toInt())
             }
-//            if (m.execMethod.equals("zpersqty2"))
-//            {
-//                var parameters = parseParameters(m.parameters) ?: return null
-//                return _calculation.fqr01.getZpersQty2(parameters);
-//            }
+            if (m.execMethod.equals("zpersqty2"))
+            {
+                var parameters = (parseParameters(m.parameters) ?: return null).toMutableList()
+                parameters[1] = parameters[1].replace("{", "")
+                parameters[parameters.size - 1] = parameters[parameters.size - 1].replace("}", "")
+                var bus = parameters.filter { !it.equals(parameters[0], true) }.map { it.toInt() }
+
+                return _calculation.fqr01.getZpersQty2(parameters[0], bus);
+            }
 //            if (m.execMethod.equals("zpersqty3"))
 //            {
 //                var parameters = parseParameters(m.parameters) ?: return null
