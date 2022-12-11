@@ -106,11 +106,11 @@ class FormulaParser(calculation: CalculationBuilder,
         }
         else if (m.execClass.equals(FqrName01))
         {
-//            if (m.execMethod.equals("zpersqty1"))
-//            {
-//                var parameters = parseParameters(m.parameters) ?: return null
-//                return _calculation.fqr01.getZpersQty1(parameters)
-//            }
+            if (m.execMethod.equals("zpersqty1"))
+            {
+                var parameters = parseParameters(m.parameters) ?: return null
+                return _calculation.fqr01.getZpersQty1(parameters[0], parameters[1].toInt())
+            }
 //            if (m.execMethod.equals("zpersqty2"))
 //            {
 //                var parameters = parseParameters(m.parameters) ?: return null
