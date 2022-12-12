@@ -108,7 +108,7 @@ open class BaseCalculator(var currentDateInt: Int = 0,
                        workbook: Workbook, evaluator: XSSFFormulaEvaluator)
     {
         var sheet = workbook.getSheet(sourceSheetName)
-        for (i in 1 until sheet.lastRowNum)
+        for (i in 1 .. sheet.lastRowNum)
             evaluateCell(bu, sheet.getRow(i), valueColumnIndex, evaluator)
 
         evaluator.evaluateAll()
