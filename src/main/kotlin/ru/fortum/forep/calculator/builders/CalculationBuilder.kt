@@ -106,7 +106,7 @@ class Fqr01(data: Data,
     }
 
     fun getZpersQty1(ztypeKf: String?, fiscPerMCount: Int) : Double {
-        var fiscPer = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0MM")).toInt() - fiscPerMCount
+        val fiscPer = fiscDate(fiscPerMCount)
 //        fiscPer = 2022009
         var result = _models.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
@@ -124,7 +124,7 @@ class Fqr01(data: Data,
         return result
     }
     fun getZpersQty3(ztypeKf: String?, fiscPerMCount: Int, bus: List<Int>) : Double {
-        var fiscPer = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0MM")).toInt() - fiscPerMCount
+        val fiscPer = fiscDate(fiscPerMCount)
 //        fiscPer = 2022009
         var result = _models.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
@@ -135,7 +135,7 @@ class Fqr01(data: Data,
         return result
     }
     fun getZwrkHrs(ztypeKf: String?, fiscPerMCount: Int) : Double {
-        var fiscPer = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0MM")).toInt() - fiscPerMCount
+        val fiscPer = fiscDate(fiscPerMCount)
 //        fiscPer = 2022009
         var result = _models.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
@@ -143,6 +143,29 @@ class Fqr01(data: Data,
         }.sumOf { it.zwrkHrs }
 
         return result
+    }
+
+    private fun fiscDate(mCount: Int): Int?  {
+        if (mCount < 0) return null
+        
+        var fiscYear = mCount / 12
+        var fiscMonth = mCount % 12
+        var curYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt()
+        var curMonth = LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()
+
+        if (fiscMonth >= curMonth) {
+            fiscYear++
+            fiscMonth = 12 + curMonth - fiscMonth
+        }
+        curYear -= fiscYear
+        curMonth -= fiscMonth
+        var curMonthStr = curMonth.toString()
+        if (curMonth < 10) curMonthStr = "0$curMonthStr"
+
+        var sb = StringBuilder()
+        sb.append(curYear).append("0").append(curMonthStr)
+
+        return sb.toString().toInt()
     }
 
     // endregion
