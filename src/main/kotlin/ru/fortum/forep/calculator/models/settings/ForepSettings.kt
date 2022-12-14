@@ -53,6 +53,46 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                     )
                 ),
             )
+            // 4
+            var report04 = TemplateSettings(
+                calcType         = 4,
+                isCalculated     = true,
+                isDebugMode      = true,
+                execDates        = listOf( "14.12",),
+                templateName     = "4T_Форма_П_2_сведения_об_инвестициях_в_нефинансовые_активы_new.xlsx",
+                code             = "Форма_П_2_сведения_об_инвестициях_в_нефинансовые_активы",
+                outputDirectory  = "4T_Форма_П_2_сведения_об_инвестициях_в_нефинансовые_активы_new",
+                outputFileName   = "Форма_П_2_сведения_об_инвестициях_в_нефинансовые_активы.xlsx",
+                sourceSheetName  = "Источники данных",
+                calculatedSheets = listOf(
+                    "Титульный лист (new)",
+                    "Раздел 1 (new)",
+                    "Раздел 2 (new)",
+                    "Справочно (new)"
+                ),
+                sourceFormulaColumn = 5,
+                sourceValueColumn   = 11,
+                baseBusinessUnit    = 1000,
+                businessUnits       = listOf(),
+                dataFiles = listOf(
+                    ru.fortum.forep.calculator.models.settings.DataFile(
+                        file = ru.fortum.forep.calculator.models.FileModel(
+                            name = "FOR_QLIK_BUKRS_ATTR_PBW",
+                            extension = "csv",
+                            "",
+                            ""
+                        )
+                    ),
+                    ru.fortum.forep.calculator.models.settings.DataFile(
+                        file = ru.fortum.forep.calculator.models.FileModel(
+                            name = "FOR_QLIK_R04_2_PBW",
+                            extension = "csv",
+                            "",
+                            ""
+                        )
+                    )
+                ),
+            )
             // 10
             var report101 = TemplateSettings(
                         calcType         = 10,
@@ -145,6 +185,8 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
             return listOf(
                 //01
                 report01,
+                //04
+                report04,
                 // 10
                 report101,
                 report102,
