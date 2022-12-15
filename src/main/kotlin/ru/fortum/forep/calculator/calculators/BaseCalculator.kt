@@ -109,8 +109,11 @@ open class BaseCalculator(var currentDateInt: Int = 0,
                        workbook: Workbook, evaluator: XSSFFormulaEvaluator)
     {
         var sheet = workbook.getSheet(sourceSheetName)
-        for (i in 1 .. sheet.lastRowNum)
-            evaluateCell(bu, sheet.getRow(i), valueColumnIndex, evaluator)
+        for (i in 1 .. sheet.lastRowNum) {
+            val cell = sheet.getRow(i)
+            if (cell != null)
+                evaluateCell(bu, cell, valueColumnIndex, evaluator)
+        }
 
         evaluator.evaluateAll()
     }
@@ -150,6 +153,7 @@ open class BaseCalculator(var currentDateInt: Int = 0,
                           sourceValueColumn: Int): ru.fortum.forep.calculator.models.items.CalculationResultItem?
     {
         var row   = sheet.getRow(i)
+        if (row == null) return null
         var cells = isCalculatedRow(evaluator, row, sourceFormulaColumn, sourceValueColumn)
         if (cells == null) return null
 
