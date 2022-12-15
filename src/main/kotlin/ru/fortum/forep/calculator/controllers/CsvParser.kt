@@ -15,6 +15,9 @@ class CsvParser(val data: Data = Data()) {
         } else if (name.contains(FqrName01)){
             if (!data.fqrs01.isNullOrEmpty()) return
             data.fqrs01 = parseFqr01(stream)
+        } else if (name.contains(FqrName04)){
+            if (!data.fqrs04.isNullOrEmpty()) return
+            data.fqrs04 = parseFqr04(stream)
         } else if (name.contains(FqrName10)) {
             if (!data.fqrs10.isNullOrEmpty()) return
             data.fqrs10 = parseFqr10(stream)
@@ -29,6 +32,7 @@ class CsvParser(val data: Data = Data()) {
         // region const:
         const val AttrName :String= "FOR_QLIK_BUKRS_ATTR_PBW"
         const val FqrName01 :String= "FOR_QLIK_R01_PBW"
+        const val FqrName04 :String= "FOR_QLIK_R04_PBW"
         const val FqrName10:String= "FOR_QLIK_R10_PBW"
         const val FqrName11:String= "FOR_QLIK_R11_PBW"
         // endregion
@@ -81,6 +85,25 @@ class CsvParser(val data: Data = Data()) {
                 ztypeKf = l[6],
                 zpersQty = l[7].toDouble(),
                 zwrkHrs = l[8].toDouble()
+            )
+        }
+        // fqr04:
+        fun parseFqr04(stream: FileInputStream): List<ru.fortum.forep.calculator.models.FqrModel04> {
+            var result = mutableListOf<ru.fortum.forep.calculator.models.FqrModel04>()
+            parseStream(stream) { index, line -> result.add(parseFqrLine04(index, line)); }
+
+            return result
+        }
+
+        fun parseFqrLine04(index: Int, line: String): ru.fortum.forep.calculator.models.FqrModel04 {
+            var l = line.split(";")
+            return ru.fortum.forep.calculator.models.FqrModel04(
+                compCode = l[0].toInt(),
+                fiscPer = l[1].toInt(),
+                fiscVarnt = l[2],
+                zperNum = l[3].toInt(),
+                ztypeKf = l[4],
+                zqKf = l[5].toDouble()
             )
         }
         // fqr10:

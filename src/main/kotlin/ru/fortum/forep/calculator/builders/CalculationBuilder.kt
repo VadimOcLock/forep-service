@@ -7,6 +7,7 @@ import java.time.format.DateTimeFormatter
 class CalculationBuilder(data:Data,
                          val attr:  Attr  = Attr(data),
                          val fqr01: Fqr01 = Fqr01(data),
+                         val fqr04: Fqr04 = Fqr04(data),
                          val fqr10: Fqr10 = Fqr10(data),
                          val fqr11: Fqr11 = Fqr11(data))
 
@@ -166,6 +167,20 @@ class Fqr01(data: Data,
         sb.append(curYear).append("0").append(curMonthStr)
 
         return sb.toString().toInt()
+    }
+
+    // endregion
+}
+class Fqr04(data: Data,
+            private var _bus: Map<Int, Int> = mutableMapOf(),
+            private var _models: List<FqrModel04> = mutableListOf()
+)
+    : BaseCalculationBuilder(data)
+{
+    // region api
+    fun init()
+    {
+        _models = data.fqrs04
     }
 
     // endregion
