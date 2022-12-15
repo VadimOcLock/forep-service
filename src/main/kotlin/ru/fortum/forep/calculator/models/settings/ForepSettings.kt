@@ -58,7 +58,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                 calcType         = 4,
                 isCalculated     = true,
                 isDebugMode      = true,
-                execDates        = listOf( "14.12",),
+                execDates        = listOf("14.12"),
                 templateName     = "4T_Форма_П_2_сведения_об_инвестициях_в_нефинансовые_активы_new.xlsx",
                 code             = "Форма_П_2_сведения_об_инвестициях_в_нефинансовые_активы",
                 outputDirectory  = "4T_Форма_П_2_сведения_об_инвестициях_в_нефинансовые_активы_new",
@@ -71,7 +71,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                     "Справочно (new)"
                 ),
                 sourceFormulaColumn = 5,
-                sourceValueColumn   = 11,
+                sourceValueColumn   = 12,
                 baseBusinessUnit    = 1000,
                 businessUnits       = listOf(),
                 dataFiles = listOf(

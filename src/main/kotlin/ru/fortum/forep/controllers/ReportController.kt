@@ -39,6 +39,9 @@ class ReportController(private val _reportBuilder: ReportBuilder = ReportBuilder
         catch (e: Exception)
         {
             println(e.message)
+            for (line in e.stackTrace) {
+                println(line)
+            }
             println("error!")
             //Logger.Error(e.ToString());
         }

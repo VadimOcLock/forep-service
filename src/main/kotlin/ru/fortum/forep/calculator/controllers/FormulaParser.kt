@@ -7,6 +7,7 @@ class FormulaParser(calculation: CalculationBuilder,
                     private val _f: Map<String, String> = mapOf(
                         AttrName  to AttrName,
                         FqrName01 to FqrName01,
+                        FqrName04 to FqrName04,
                         FqrName10 to  FqrName10,
                         FqrName11 to  FqrName11
                     )
@@ -15,9 +16,10 @@ class FormulaParser(calculation: CalculationBuilder,
         // region constants
         // classes:
         const val AttrName:String  = "attr";
+        const val FqrName01:String = "fqr01";
+        const val FqrName04:String = "fqr04";
         const val FqrName10:String = "fqr10";
         const val FqrName11:String = "fqr11";
-        const val FqrName01:String = "fqr01";
         // methods:
         const val AmountMethodName:String = "amount";
         // endregion
@@ -133,6 +135,14 @@ class FormulaParser(calculation: CalculationBuilder,
             {
                 var parameters = parseParameters(m.parameters) ?: return null
                 return _calculation.fqr01.getZwrkHrs(parameters[0], parameters[1].toInt())
+            }
+        }
+        else if (m.execClass.equals(FqrName04))
+        {
+            if (m.execMethod.equals("period"))
+            {
+                var parameters = parseParameters(m.parameters) ?: return null
+                return _calculation.fqr04.getPeriod()
             }
         }
         else if (m.execClass.equals(FqrName10))

@@ -182,7 +182,17 @@ class Fqr04(data: Data,
     {
         _models = data.fqrs04
     }
-
+    fun getPeriod() : String {
+        var sbPeriod = StringBuilder()
+        when(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) {
+            in 1..3 -> sbPeriod.append("01")
+            in 4..6 -> sbPeriod.append("02")
+            in 7..9 -> sbPeriod.append("03")
+            in 10..12 -> sbPeriod.append("04")
+        }
+        sbPeriod.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt())
+        return sbPeriod.toString()
+    }
     // endregion
 }
 class Fqr10(data: Data,
