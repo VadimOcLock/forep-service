@@ -10,12 +10,12 @@ open class FqrModel01(var compCode: Int,
                       var zpersQty: Double,
                       var zwrkHrs: Double)
 
-open class FqrModel04(var fiscPer: Int,
-                      var compCode: Int,
-                      var vendor: Int,
-                      var zqText1: String,
-                      var zacInn: Int,
-                      var amount: Double)
+open class FqrModel04(var compCode: Int,
+                      var fiscPer: Int,
+                      var fiscVarnt: String,
+                      var zperNum: Int,
+                      var ztypeKf: String,
+                      var zqKf: Double)
 
 open class FqrModel10(var index: Int,
                       var compCode: Int,
