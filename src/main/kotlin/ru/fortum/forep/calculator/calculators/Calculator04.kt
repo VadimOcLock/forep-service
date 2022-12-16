@@ -16,7 +16,7 @@ class Calculator04: BaseCalculator() {
         currentDateInt = getCurrentDate()
         calcBuilder    = _calcBuilder
         calcBuilder!!.attr.init(_settings.template.baseBusinessUnit, currentDateInt)
-        calcBuilder!!.fqr04.init()
+        calcBuilder!!.fqr04.init(_settings.template.baseBusinessUnit)
         formulaParser  = FormulaParser(calcBuilder!!)
         settings       = _settings
 

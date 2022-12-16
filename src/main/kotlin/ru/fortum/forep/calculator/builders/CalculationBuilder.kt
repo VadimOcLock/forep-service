@@ -3,6 +3,7 @@ package ru.fortum.forep.calculator.builders
 import ru.fortum.forep.calculator.models.*
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
+import java.util.DoubleSummaryStatistics
 
 class CalculationBuilder(data:Data,
                          val attr:  Attr  = Attr(data),
@@ -178,22 +179,36 @@ class Fqr04(data: Data,
     : BaseCalculationBuilder(data)
 {
     // region api
-    fun init()
+    fun init(bu: Int)
     {
-        _models = data.fqrs04
+        _models = data.fqrs04.filter{ it.compCode == bu }
     }
     fun getPeriod() : String {
         var sbPeriod = StringBuilder()
-        when(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) {
-            in 1..3 -> sbPeriod.append("01")
-            in 4..6 -> sbPeriod.append("02")
-            in 7..9 -> sbPeriod.append("03")
-            in 10..12 -> sbPeriod.append("04")
-        }
+        sbPeriod.append("0${getFiscPeriod(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt())}")
         sbPeriod.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt())
         return sbPeriod.toString()
     }
+
+    fun getZqkf01(ztypeKf: String) : Double? {
+        return _models.filter {
+            it.ztypeKf.equals(ztypeKf, true) &&
+            it.fiscPer in (it.fiscPer / 1000 * 1000 + 1) .. (it.fiscPer / 1000 * 1000 + getFiscPeriod(it.fiscPer % 10000) * 3)
+        }.sumOf { it.zqKf } / 1000
+    }
     // endregion
+    private fun getFiscPeriod(month: Int) : Int {
+        return when (month) {
+            in 1..3 -> 1
+            in 4..6 -> 2
+            in 7..9 -> 3
+            in 10..12 -> 4
+            else -> 0
+        }
+    }
+    enum class Period {
+
+    }
 }
 class Fqr10(data: Data,
             private var _bus: Map<Int, Int> = mutableMapOf(),
