@@ -15,7 +15,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
     val templatesSettings: List<TemplateSettings> = getTemplateSettings()
 
     companion object {
-        fun getTemplateSettings() : List<TemplateSettings> {
+        fun getTemplateSettings() : MutableList<TemplateSettings> {
             // 1
             var report01 = TemplateSettings(
                 calcType         = 1,
@@ -54,7 +54,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                 ),
             )
             // 4
-            var report04 = TemplateSettings(
+            var report041 = TemplateSettings(
                 calcType         = 4,
                 isCalculated     = true,
                 isDebugMode      = true,
@@ -73,7 +73,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                 sourceFormulaColumn = 5,
                 sourceValueColumn   = 12,
                 baseBusinessUnit    = 1000,
-                businessUnits       = listOf(),
+                businessUnits       = listOf(1000, 1100, 1200, 1300, 1400, 1600, 1900, 2100, 2200, 2600, 2900, 5600, 5700, 5800, 7100, 7900, 8100, 8200, 8300, 8400, 9100),
                 dataFiles = listOf(
                     ru.fortum.forep.calculator.models.settings.DataFile(
                         file = ru.fortum.forep.calculator.models.FileModel(
@@ -93,6 +93,14 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                     )
                 ),
             )
+            var reportList04 = mutableListOf<TemplateSettings>()
+            var counter = 1
+            for (bu in report041.businessUnits) {
+                var report04 = report041.clone()
+                report04.baseBusinessUnit = bu
+                report04.outputFileName = "Отчёт №${counter++}.xlsx"
+                reportList04.add(report04)
+            }
             // 10
             var report101 = TemplateSettings(
                         calcType         = 10,
@@ -182,19 +190,20 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                         ),
             )
 
-            return listOf(
-                //01
-                report01,
-                //04
-                report04,
-                // 10
-                report101,
-                report102,
-                report103,
-                report104,
-                // 11
-                report11
-            )
+            var reports = mutableListOf<TemplateSettings>()
+            // 01
+            reports.add(report01)
+            // 04
+            reports.addAll(reportList04)
+            // 10
+            reports.add(report101)
+            reports.add(report102)
+            reports.add(report103)
+            reports.add(report104)
+            // 11
+            reports.add(report11)
+
+            return reports
         }
     }
     fun toJson() : String = Json.encodeToString(templatesSettings)
