@@ -194,11 +194,11 @@ class Fqr04(data: Data,
     }
 
     fun getZqkf01(bu: Int, ztypeKf: String) : Double? {
-        if (!_fqrModelsByBu.containsKey(bu)) return null
+        if (!_fqrModelsByBu.containsKey(bu)) return 0.0
 
         var result = _fqrModelsByBu[bu]?.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
-            it.fiscPer in (it.fiscPer / 1000 * 1000 + 1) .. (it.fiscPer / 1000 * 1000 + getFiscPeriod(it.fiscPer % 10000) * 3)
+            it.fiscPer in (it.fiscPer / 1000 * 1000 + 1) .. (it.fiscPer / 1000 * 1000 + getFiscPeriod(it.fiscPer % 100) * 3)
         }?.sumOf { it.zqKf }
 
         return if (result == null) null else result / 1000
@@ -212,9 +212,6 @@ class Fqr04(data: Data,
             in 10..12 -> 4
             else -> 0
         }
-    }
-    enum class Period {
-
     }
 }
 class Fqr10(data: Data,
@@ -249,7 +246,7 @@ class Fqr10(data: Data,
         var v = data.fqrs11.filter{it.compCode == bu}
         if (v.isEmpty()) return
         //
-        _fqrModelsByBu[bu] = v;
+        _fqrModelsByBu[bu] = v
     }
     fun getAmount(bu: Int, ztypeKf : String) : Double?
     {
