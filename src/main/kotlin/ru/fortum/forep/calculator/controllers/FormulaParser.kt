@@ -143,7 +143,7 @@ class FormulaParser(calculation: CalculationBuilder,
             if (m.execMethod.equals("zqkf01"))
             {
                 var parameters = parseParameters(m.parameters) ?: return null
-                return _calculation.fqr04.getZqkf01(parameters[0])
+                return _calculation.fqr04.getZqkf01(m.bu, parameters[0])
             }
         }
         else if (m.execClass.equals(FqrName10))

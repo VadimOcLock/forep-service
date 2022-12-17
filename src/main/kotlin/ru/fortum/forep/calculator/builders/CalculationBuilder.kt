@@ -173,15 +173,18 @@ class Fqr01(data: Data,
     // endregion
 }
 class Fqr04(data: Data,
-            private var _bus: Map<Int, Int> = mutableMapOf(),
-            private var _models: List<FqrModel04> = mutableListOf()
-)
+            private val _fqrModelsByBu: MutableMap<Int, List<FqrModel04>> = mutableMapOf())
     : BaseCalculationBuilder(data)
 {
     // region api
     fun init(bu: Int)
     {
-        _models = data.fqrs04.filter{ it.compCode == bu }
+        if (_fqrModelsByBu.containsKey(bu)) return;
+        //
+        var v = data.fqrs04.filter{it.compCode == bu}
+        if (v.isEmpty()) return
+        //
+        _fqrModelsByBu[bu] = v
     }
     fun getPeriod() : String {
         var sbPeriod = StringBuilder()
@@ -190,11 +193,15 @@ class Fqr04(data: Data,
         return sbPeriod.toString()
     }
 
-    fun getZqkf01(ztypeKf: String) : Double? {
-        return _models.filter {
+    fun getZqkf01(bu: Int, ztypeKf: String) : Double? {
+        if (!_fqrModelsByBu.containsKey(bu)) return null
+
+        var result = _fqrModelsByBu[bu]?.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
             it.fiscPer in (it.fiscPer / 1000 * 1000 + 1) .. (it.fiscPer / 1000 * 1000 + getFiscPeriod(it.fiscPer % 10000) * 3)
-        }.sumOf { it.zqKf } / 1000
+        }?.sumOf { it.zqKf }
+
+        return if (result == null) null else result / 1000
     }
     // endregion
     private fun getFiscPeriod(month: Int) : Int {
