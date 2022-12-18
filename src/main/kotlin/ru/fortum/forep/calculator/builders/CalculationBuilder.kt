@@ -188,23 +188,35 @@ class Fqr04(data: Data,
     }
     fun getPeriod() : String {
         var sbPeriod = StringBuilder()
-        sbPeriod.append("0${getFiscPeriod(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt())}")
+        sbPeriod.append("0${getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt())}")
         sbPeriod.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt())
         return sbPeriod.toString()
     }
 
-    fun getZqkf01(bu: Int, ztypeKf: String) : Double? {
+    fun getZqkf01(bu: Int, ztypeKf: String, diapasoneType: Int) : Double? {
         if (!_fqrModelsByBu.containsKey(bu)) return 0.0
+
+        val timeRange = when (diapasoneType) {
+            DiapasoneType.FIRST_MONTH_CURR_YEAR_TO_CURR_PERIOD.diapasoneNum -> {
+                getFiscBeginOfYear() .. getFiscPeriodOfCurrYear()
+            }
+            DiapasoneType.CURR_PERIOD.diapasoneNum -> {
+                getFiscFirstMonthCurrPeriod() .. getFiscLastMonthCurrPeriod()
+            }
+            else -> throw IllegalStateException()
+        }
 
         var result = _fqrModelsByBu[bu]?.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
-            it.fiscPer in (it.fiscPer / 1000 * 1000 + 1) .. (it.fiscPer / 1000 * 1000 + getFiscPeriod(it.fiscPer % 100) * 3)
+            it.fiscPer in timeRange
         }?.sumOf { it.zqKf }
 
         return if (result == null) null else result / 1000
     }
     // endregion
-    private fun getFiscPeriod(month: Int) : Int {
+
+    // region methods
+    private fun getPeriodFromMonth(month: Int) : Int {
         return when (month) {
             in 1..3 -> 1
             in 4..6 -> 2
@@ -213,6 +225,32 @@ class Fqr04(data: Data,
             else -> 0
         }
     }
+    enum class DiapasoneType(val diapasoneNum: Int) {
+        FIRST_MONTH_CURR_YEAR_TO_CURR_PERIOD(1),
+        CURR_PERIOD(2),
+
+    }
+    private fun getFiscBeginOfYear() : Int = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy001")).toInt()
+    private fun getFiscPeriodOfCurrYear() : Int =
+        LocalDate.now().format(DateTimeFormatter.ofPattern(
+            "yyy00${getPeriodFromMonth(
+                LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt())}"
+        )).toInt()
+    private fun getFiscFirstMonthCurrPeriod() : Int {
+        val beginPeriodMonth = getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3 - 2
+        return if (beginPeriodMonth < 10)
+            LocalDate.now().format(DateTimeFormatter.ofPattern("yyy00${beginPeriodMonth}")).toInt()
+        else
+            LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0${beginPeriodMonth}")).toInt()
+    }
+    private fun getFiscLastMonthCurrPeriod() : Int {
+        var beginPeriodMonth = getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3
+        return if (beginPeriodMonth < 10)
+            LocalDate.now().format(DateTimeFormatter.ofPattern("yyy00${beginPeriodMonth}")).toInt()
+        else
+            LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0${beginPeriodMonth}")).toInt()
+    }
+    // endregion
 }
 class Fqr10(data: Data,
             private var _bus: Map<Int, Int> = mutableMapOf(),
