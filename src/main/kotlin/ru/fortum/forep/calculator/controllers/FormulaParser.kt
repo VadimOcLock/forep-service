@@ -140,12 +140,15 @@ class FormulaParser(calculation: CalculationBuilder,
         }
         else if (m.execClass.equals(FqrName04))
         {
-            if (m.execMethod.equals("period")) return _calculation.fqr04.getPeriod()
+            if (m.execMethod.equals("period"))
+                return _calculation.fqr04.getPeriod()
             if (m.execMethod.equals("zqkf01"))
             {
                 var parameters = parseParameters(m.parameters) ?: return null
                 return _calculation.fqr04.getZqkf01(m.bu, parameters[0], parameters[1].toInt())
             }
+            if (m.execMethod.equals("zokved"))
+                return _calculation.fqr04.getZokVed(m.bu)
         }
         else if (m.execClass.equals(FqrName10))
         {

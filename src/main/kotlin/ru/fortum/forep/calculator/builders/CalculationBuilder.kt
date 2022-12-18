@@ -228,6 +228,11 @@ class Fqr04(
 
         return if (result == null) null else result / 1000
     }
+
+    fun getZokVed(bu: Int) : String {
+        //TODO zokved method
+        return "todo"
+    }
     // endregion
 
     // region methods
