@@ -57,7 +57,18 @@ class ApplicationTest {
                 "${previousYear}0${lastMonthOfPeriod}".toInt()
         }
 
-        println(getFiscCurrentPeriodPreviousYear())
+        // CURRENT_PERIOD_PREVIOUS_YEAR
+        fun getFiscBeginCurrentPeriodPreviousYear() : Int {
+            var previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
+            var firstMonthOfPeriod =
+                getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3 - 2
+            return if (firstMonthOfPeriod < 10)
+                "${previousYear}00${firstMonthOfPeriod}".toInt()
+            else
+                "${previousYear}0${firstMonthOfPeriod}".toInt()
+        }
+
+        println(getFiscBeginCurrentPeriodPreviousYear())
 
     }
 }
