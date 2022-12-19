@@ -149,6 +149,11 @@ class FormulaParser(calculation: CalculationBuilder,
             }
             if (m.execMethod.equals("zokved"))
                 return _calculation.fqr04.getZokVed(m.bu)
+            if (m.execMethod.equals("zqtext"))
+            {
+                var parameters = parseParameters(m.parameters) ?: return null
+                return _calculation.fqr04.getZqText(m.bu, parameters[1].toInt())
+            }
         }
         else if (m.execClass.equals(FqrName10))
         {

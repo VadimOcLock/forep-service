@@ -245,7 +245,7 @@ class Fqr04(
         return "нет значений"
     }
 
-    fun getZqText1(bu: Int, diapasonType: Int) {
+    fun getZqText(bu: Int, diapasonType: Int) {
         //TODO method for FOR_QLIK_R04_2_PBW.FOR_QLIK_R04_2_PBW
     }
     // endregion
