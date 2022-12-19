@@ -179,16 +179,18 @@ class Fqr01(
 
 class Fqr04(
     data: Data,
-    private val _fqrModelsByBu: MutableMap<Int, List<FqrModel04>> = mutableMapOf()
+    private val _fqrModelsByBu: MutableMap<Int, List<FqrModel04>> = mutableMapOf(),
+    private var _fqrOKVEDModelsByBu: Map<Int, FqrModel04OKVED> = mutableMapOf()
 ) : BaseCalculationBuilder(data) {
     // region api
     fun init(bu: Int) {
-        if (_fqrModelsByBu.containsKey(bu)) return;
+        if (_fqrModelsByBu.containsKey(bu)) return
         //
         var v = data.fqrs04.filter { it.compCode == bu }
         if (v.isEmpty()) return
         //
         _fqrModelsByBu[bu] = v
+        _fqrOKVEDModelsByBu = data.fqrs04OKVED.associateBy { it.compCode }
     }
 
     fun getPeriod(): String {
@@ -215,7 +217,7 @@ class Fqr04(
             }
 
             DiapasonType.CURRENT_PERIOD_PREVIOUS_YEAR.diapasonIndex -> {
-                getFiscBeginCurrentPeriodPreviousYear() .. getFiscLastMonthCurrentPeriodPreviousYear()
+                getFiscBeginCurrentPeriodPreviousYear()..getFiscLastMonthCurrentPeriodPreviousYear()
             }
 
             else -> throw IllegalStateException()
@@ -229,9 +231,22 @@ class Fqr04(
         return if (result == null) null else result / 1000
     }
 
-    fun getZokVed(bu: Int) : String {
-        //TODO zokved method
-        return "todo"
+    fun getZokVed(bu: Int): String {
+        var zokvedStr = _fqrOKVEDModelsByBu[bu]?.zokVed
+        if (zokvedStr != null) {
+            if (zokvedStr.contains(",")) {
+                var zokvedList = zokvedStr.split(", ")
+                var sbResult = StringBuilder()
+                zokvedList.forEach { sbResult.append("$it\n") }
+                return sbResult.toString()
+            }
+            return zokvedStr
+        }
+        return "нет значений"
+    }
+
+    fun getZqText1(bu: Int, diapasonType: Int) {
+        //TODO method for FOR_QLIK_R04_2_PBW.FOR_QLIK_R04_2_PBW
     }
     // endregion
 
@@ -291,7 +306,7 @@ class Fqr04(
             "${previousYear}0${lastMonthOfPeriod}".toInt()
     }
 
-    fun getFiscBeginCurrentPeriodPreviousYear() : Int {
+    fun getFiscBeginCurrentPeriodPreviousYear(): Int {
         var previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
         var firstMonthOfPeriod =
             getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3 - 2

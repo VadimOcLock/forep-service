@@ -98,6 +98,14 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                             "",
                             ""
                         )
+                    ),
+                    ru.fortum.forep.calculator.models.settings.DataFile(
+                        file = ru.fortum.forep.calculator.models.FileModel(
+                            name = "FOR_QLIK_R04_2_PBW",
+                            extension = "csv",
+                            "",
+                            ""
+                        )
                     )
                 ),
             )

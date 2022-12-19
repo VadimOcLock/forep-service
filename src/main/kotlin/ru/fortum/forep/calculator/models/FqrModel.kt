@@ -27,6 +27,15 @@ open class FqrModel04OKVED(
     var zokVed: String
 )
 
+open class FqrModel04_02(
+    var fiscPer: Int,
+    var compCode: Int,
+    var vendor: Double,
+    var zqText: String,
+    var zacInn: Double,
+    var amount: Double
+)
+
 open class FqrModel10(
     var index: Int,
     var compCode: Int,
