@@ -27,7 +27,7 @@ open class FqrModel04OKVED(
     var zokVed: String
 )
 
-open class FqrModel04_02(
+data class FqrModel04_02(
     var fiscPer: Int,
     var compCode: Int,
     var vendor: Double,

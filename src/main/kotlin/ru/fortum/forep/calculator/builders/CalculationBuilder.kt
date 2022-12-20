@@ -180,17 +180,20 @@ class Fqr01(
 class Fqr04(
     data: Data,
     private val _fqrModelsByBu: MutableMap<Int, List<FqrModel04>> = mutableMapOf(),
-    private var _fqrOKVEDModelsByBu: Map<Int, FqrModel04OKVED> = mutableMapOf()
+    private var _fqrOKVEDModelsByBu: Map<Int, FqrModel04OKVED> = mutableMapOf(),
+    private var _fqr04_02ModelsByBu: MutableMap<Int, List<FqrModel04_02>> = mutableMapOf(),
 ) : BaseCalculationBuilder(data) {
     // region api
     fun init(bu: Int) {
         if (_fqrModelsByBu.containsKey(bu)) return
         //
         var v = data.fqrs04.filter { it.compCode == bu }
+        var v_02 = data.fqrs04_02.filter { it.compCode == bu }
         if (v.isEmpty()) return
         //
         _fqrModelsByBu[bu] = v
         _fqrOKVEDModelsByBu = data.fqrs04OKVED.associateBy { it.compCode }
+        _fqr04_02ModelsByBu[bu] = v_02
     }
 
     fun getPeriod(): String {
@@ -203,41 +206,23 @@ class Fqr04(
     fun getZqkf01(bu: Int, ztypeKf: String, diapasonType: Int): Double? {
         if (!_fqrModelsByBu.containsKey(bu)) return 0.0
 
-        val timeRange = when (diapasonType) {
-            DiapasonType.FIRST_MONTH_CURRENT_YEAR_TO_CURRENT_PERIOD.diapasonIndex -> {
-                getFiscBeginOfYear()..getFiscPeriodOfCurrentYear()
-            }
-
-            DiapasonType.CURRENT_PERIOD_CURRENT_YEAR.diapasonIndex -> {
-                getFiscFirstMonthCurrentPeriod()..getFiscLastMonthCurrentPeriod()
-            }
-
-            DiapasonType.FIRST_MONTH_PREVIOUS_YEAR_TO_CURRENT_PERIOD_PREVIOUS_YEAR.diapasonIndex -> {
-                getFiscFirstMonthPreviousYear()..getFiscLastMonthCurrentPeriodPreviousYear()
-            }
-
-            DiapasonType.CURRENT_PERIOD_PREVIOUS_YEAR.diapasonIndex -> {
-                getFiscBeginCurrentPeriodPreviousYear()..getFiscLastMonthCurrentPeriodPreviousYear()
-            }
-
-            else -> throw IllegalStateException()
-        }
-
         var result = _fqrModelsByBu[bu]?.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
-                    it.fiscPer in timeRange
+                    it.fiscPer in getTimeRange(diapasonType)
         }?.sumOf { it.zqKf }
 
         return if (result == null) null else result / 1000
     }
 
     fun getZokVed(bu: Int): String {
-        var zokvedStr = _fqrOKVEDModelsByBu[bu]?.zokVed
+        val zokvedStr = _fqrOKVEDModelsByBu[bu]?.zokVed
         if (zokvedStr != null) {
             if (zokvedStr.contains(",")) {
-                var zokvedList = zokvedStr.split(", ")
-                var sbResult = StringBuilder()
-                zokvedList.forEach { sbResult.append("$it\n") }
+                val zokvedList = zokvedStr.split(", ")
+                val sbResult = StringBuilder()
+                zokvedList.forEach {
+                    if (it == zokvedList.last()) sbResult.append(it) else sbResult.append("$it\n")
+                }
                 return sbResult.toString()
             }
             return zokvedStr
@@ -245,8 +230,19 @@ class Fqr04(
         return "нет значений"
     }
 
-    fun getZqText(bu: Int, diapasonType: Int) {
-        //TODO method for FOR_QLIK_R04_2_PBW.FOR_QLIK_R04_2_PBW
+    fun getZqText(bu: Int, diapasonType: Int): String {
+        if (!_fqr04_02ModelsByBu.containsKey(bu)) return "нет значений"
+
+        var models = _fqr04_02ModelsByBu[bu]?.filter {
+            it.compCode == bu &&
+                    it.fiscPer in getTimeRange(diapasonType)
+        }
+        var sb = StringBuilder()
+        models?.forEach {
+            if (it == models.last()) sb.append(it.zqText) else sb.append("${it.zqText}, ")
+        }
+
+        return sb.toString()
     }
     // endregion
 
@@ -265,6 +261,28 @@ class Fqr04(
             in 7..9 -> 3
             in 10..12 -> 4
             else -> 0
+        }
+    }
+
+    private fun getTimeRange(diapasonIndex: Int): IntRange {
+        when (diapasonIndex) {
+            DiapasonType.FIRST_MONTH_CURRENT_YEAR_TO_CURRENT_PERIOD.diapasonIndex -> {
+                return getFiscBeginOfYear()..getFiscPeriodOfCurrentYear()
+            }
+
+            DiapasonType.CURRENT_PERIOD_CURRENT_YEAR.diapasonIndex -> {
+                return getFiscFirstMonthCurrentPeriod()..getFiscLastMonthCurrentPeriod()
+            }
+
+            DiapasonType.FIRST_MONTH_PREVIOUS_YEAR_TO_CURRENT_PERIOD_PREVIOUS_YEAR.diapasonIndex -> {
+                return getFiscFirstMonthPreviousYear()..getFiscLastMonthCurrentPeriodPreviousYear()
+            }
+
+            DiapasonType.CURRENT_PERIOD_PREVIOUS_YEAR.diapasonIndex -> {
+                return getFiscBeginCurrentPeriodPreviousYear()..getFiscLastMonthCurrentPeriodPreviousYear()
+            }
+
+            else -> throw IllegalStateException()
         }
     }
 
