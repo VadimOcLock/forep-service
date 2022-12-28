@@ -154,13 +154,20 @@ class FormulaParser(calculation: CalculationBuilder,
                 var parameters = parseParameters(m.parameters) ?: return null
                 return _calculation.fqr04.getZqText(m.bu, parameters[0].toInt())
             }
+            if (m.execMethod.equals("zacinn"))
+                return _calculation.fqr04.getZacInn(m.bu)
+            if (m.execMethod.equals("amount"))
+            {
+                var parameters = parseParameters(m.parameters) ?: return null
+                return _calculation.fqr04.getAmount(m.bu, parameters[0].toInt())
+            }
         }
         else if (m.execClass.equals(FqrName10))
         {
             if (m.execMethod.equals(AmountMethodName))
             {
                 var parameters = parseParameters(m.parameters) ?: return null
-                return _calculation.fqr10.getAmount(parameters[0]);
+                return _calculation.fqr10.getAmount(parameters[0])
             }
         }
         else if (m.execClass.equals(FqrName11))
@@ -168,7 +175,7 @@ class FormulaParser(calculation: CalculationBuilder,
             if (m.execMethod.equals(AmountMethodName))
             {
                 var parameters = parseParameters(m.parameters) ?: return null
-                return _calculation.fqr11.getAmount(m.bu, parameters[0]);
+                return _calculation.fqr11.getAmount(m.bu, parameters[0])
             }
         }
 

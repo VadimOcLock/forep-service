@@ -230,8 +230,9 @@ class Fqr04(
         return "нет значений"
     }
 
-    fun getZqText(bu: Int, diapasonType: Int): String {
-        if (!_fqr04_02ModelsByBu.containsKey(bu)) return "нет значений"
+    fun getZqText(bu: Int, diapasonType: Int): String? {
+        if (!_fqr04_02ModelsByBu.containsKey(bu))
+            return "нет значений"
 
         var models = _fqr04_02ModelsByBu[bu]?.filter {
             it.compCode == bu &&
@@ -243,6 +244,34 @@ class Fqr04(
         }
 
         return sb.toString()
+    }
+
+    fun getZacInn(bu: Int): Double? {
+        if (_fqr04_02ModelsByBu[bu].isNullOrEmpty())
+            return 0.0
+
+        var models = _fqr04_02ModelsByBu[bu]?.filter {
+            it.compCode == bu &&
+                    it.fiscPer in getTimeRange(2)
+        }
+
+        //TODO Изменить возвращаемое значение после согласования.
+        return if (models.isNullOrEmpty()) 0.0
+        else models[0].zacInn
+    }
+
+    fun getAmount(bu: Int, diapasonType: Int): Double {
+        if (_fqr04_02ModelsByBu[bu].isNullOrEmpty())
+            return 0.0
+
+        var models = _fqr04_02ModelsByBu[bu]?.filter {
+            it.compCode == bu &&
+                    it.fiscPer in getTimeRange(2)
+        }
+
+        //TODO Изменить возвращаемое значение после согласования.
+        return if (models.isNullOrEmpty()) 0.0
+        else models[0].amount
     }
     // endregion
 
@@ -324,7 +353,7 @@ class Fqr04(
             "${previousYear}0${lastMonthOfPeriod}".toInt()
     }
 
-    fun getFiscBeginCurrentPeriodPreviousYear(): Int {
+    private fun getFiscBeginCurrentPeriodPreviousYear(): Int {
         var previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
         var firstMonthOfPeriod =
             getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3 - 2
