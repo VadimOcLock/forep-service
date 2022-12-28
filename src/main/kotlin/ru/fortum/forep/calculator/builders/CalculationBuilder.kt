@@ -47,22 +47,22 @@ class Attr(data: Data) : BaseCalculationBuilder(data) {
     }
 
     fun getZqtext1(bu: Int, date: Int): String? {
-        var code = getCode(bu, date);
+        var code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zqtext1
     }
 
     fun getZqtext2(bu: Int, date: Int): String? {
-        var code = getCode(bu, date);
+        var code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zqtext2
     }
 
     fun getZqtext3(bu: Int, date: Int): String? {
-        var code = getCode(bu, date);
+        var code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zqtext3
     }
 
     fun getZqtext4(bu: Int, date: Int): String? {
-        var code = getCode(bu, date);
+        var code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zqtext4
     }
 
