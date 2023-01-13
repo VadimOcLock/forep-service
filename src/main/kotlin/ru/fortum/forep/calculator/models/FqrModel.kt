@@ -12,6 +12,17 @@ open class FqrModel01(
     var zwrkHrs: Double
 )
 
+open class FqrModel02(
+    var compCode: Int,
+    var fiscPer: Int,
+    var fiscVarnt: String,
+    var persArea: String,
+    var zimonIntRv: Int,
+    var zperNum: Int,
+    var ztypeKf: String,
+    var zpersQty: Double
+)
+
 open class FqrModel04(
     var compCode: Int,
     var fiscPer: Int,

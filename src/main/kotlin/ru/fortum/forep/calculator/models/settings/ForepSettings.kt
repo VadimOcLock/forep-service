@@ -53,6 +53,47 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                     )
                 ),
             )
+            // 2
+            var report02 = TemplateSettings(
+                calcType         = 2,
+                isCalculated     = false,
+                isDebugMode      = true,
+                execDates        = listOf( "13.01",),
+                templateName     = "2_Сведения_о_неполной_занятости_и_движении_работников.xlsx",
+                code             = "Отчет по отсутствиям",
+                outputDirectory  = "2_Сведения_о_неполной_занятости_и_движении_работников",
+                outputFileName   = "Сведения о неполной занятости и движении работников.xlsx",
+                sourceSheetName  = "показатели расчет",
+                calculatedSheets = listOf(
+                    "л.1 расчет",
+                    "л.2 расчет",
+                    "Сведения о неполн. занят. и дви",
+                    "титульный лист",
+
+                ),
+                sourceFormulaColumn = 5,
+                sourceValueColumn   = 11,
+                baseBusinessUnit    = 1000,
+                businessUnits       = listOf(),
+                dataFiles = listOf(
+                    ru.fortum.forep.calculator.models.settings.DataFile(
+                        file = ru.fortum.forep.calculator.models.FileModel(
+                            name = "FOR_QLIK_BUKRS_ATTR_PBW",
+                            extension = "csv",
+                            "",
+                            ""
+                        )
+                    ),
+                    ru.fortum.forep.calculator.models.settings.DataFile(
+                        file = ru.fortum.forep.calculator.models.FileModel(
+                            name = "FOR_QLIK_R01_PBW",
+                            extension = "csv",
+                            "",
+                            ""
+                        )
+                    )
+                ),
+            )
             // 4
             var report04 = TemplateSettings(
                 calcType         = 4,
@@ -71,9 +112,9 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                     "Справочно (new)"
                 ),
                 sourceFormulaColumn = 5,
-                sourceValueColumn   = 12,
+                sourceValueColumn   = 9,
                 baseBusinessUnit    = 1000,
-                businessUnits       = listOf(1000, 1100, 1200, 1300, 1400, 1600, 1900, 2100, 2200, 2600, 2900, 5600, 5700, 5800, 7100, 7900, 8100, 8200, 8300, 8400, 9100),
+                businessUnits       = listOf(),
                 dataFiles = listOf(
                     ru.fortum.forep.calculator.models.settings.DataFile(
                         file = ru.fortum.forep.calculator.models.FileModel(
@@ -85,29 +126,13 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                     ),
                     ru.fortum.forep.calculator.models.settings.DataFile(
                         file = ru.fortum.forep.calculator.models.FileModel(
-                            name = "FOR_QLIK_R04_PBW",
-                            extension = "csv",
-                            "",
-                            ""
-                        )
-                    ),
-                    ru.fortum.forep.calculator.models.settings.DataFile(
-                        file = ru.fortum.forep.calculator.models.FileModel(
-                            name = "FOR_QLIK_R04_OKVED_PBW",
-                            extension = "csv",
-                            "",
-                            ""
-                        )
-                    ),
-                    ru.fortum.forep.calculator.models.settings.DataFile(
-                        file = ru.fortum.forep.calculator.models.FileModel(
-                            name = "FOR_QLIK_R04_2_PBW",
+                            name = "FOR_QLIK_R02_PBW",
                             extension = "csv",
                             "",
                             ""
                         )
                     )
-                ),
+                )
             )
             // 10
             var report101 = TemplateSettings(
