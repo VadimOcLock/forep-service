@@ -56,7 +56,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
             // 2
             var report02 = TemplateSettings(
                 calcType         = 2,
-                isCalculated     = false,
+                isCalculated     = true,
                 isDebugMode      = true,
                 execDates        = listOf( "13.01",),
                 templateName     = "2_Сведения_о_неполной_занятости_и_движении_работников.xlsx",
@@ -86,7 +86,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                     ),
                     ru.fortum.forep.calculator.models.settings.DataFile(
                         file = ru.fortum.forep.calculator.models.FileModel(
-                            name = "FOR_QLIK_R01_PBW",
+                            name = "FOR_QLIK_R02_PBW",
                             extension = "csv",
                             "",
                             ""
@@ -97,7 +97,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
             // 4
             var report04 = TemplateSettings(
                 calcType         = 4,
-                isCalculated     = true,
+                isCalculated     = false,
                 isDebugMode      = true,
                 execDates        = listOf("14.12"),
                 templateName     = "4T_Форма_П_2_сведения_об_инвестициях_в_нефинансовые_активы_new.xlsx",
@@ -126,13 +126,29 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                     ),
                     ru.fortum.forep.calculator.models.settings.DataFile(
                         file = ru.fortum.forep.calculator.models.FileModel(
-                            name = "FOR_QLIK_R02_PBW",
+                            name = "FOR_QLIK_R04_PBW",
+                            extension = "csv",
+                            "",
+                            ""
+                        )
+                    ),
+                    ru.fortum.forep.calculator.models.settings.DataFile(
+                        file = ru.fortum.forep.calculator.models.FileModel(
+                            name = "FOR_QLIK_R04_OKVED_PBW",
+                            extension = "csv",
+                            "",
+                            ""
+                        )
+                    ),
+                    ru.fortum.forep.calculator.models.settings.DataFile(
+                        file = ru.fortum.forep.calculator.models.FileModel(
+                            name = "FOR_QLIK_R04_2_PBW",
                             extension = "csv",
                             "",
                             ""
                         )
                     )
-                )
+                ),
             )
             // 10
             var report101 = TemplateSettings(
@@ -226,6 +242,8 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
             return listOf(
                 // 01
                 report01,
+                // 02
+                report02,
                 // 04
                 report04,
                 // 11
