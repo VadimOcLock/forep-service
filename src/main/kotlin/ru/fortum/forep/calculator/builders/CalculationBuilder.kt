@@ -21,75 +21,74 @@ class Attr(data: Data) : BaseCalculationBuilder(data) {
     // region api
     // init:
     fun init(bu: Int, date: Int) {
-        var code = getCode(bu, date)
+        val code = getCode(bu, date)
         if (_attrModelsByDate.containsKey(code)) return
         //
-        var v = data.attrs.filter { it.compCode == bu }
-        var r = v.filter { it.dateFrom < date && it.dateTo > date }
-        var rr = r.first()
+        val v = data.attrs.filter { it.compCode == bu }
+        val r = v.filter { it.dateFrom < date && it.dateTo > date }
+        val rr = r.first()
         //
         _attrModelsByDate[code] = rr
     }
 
     // get:
     fun getAttr(bu: Int, date: Int): AttrModel? {
-        var code = getCode(bu, date)
+        val code = getCode(bu, date)
 
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]
     }
 
     /// <summary>  </summary>
-    fun getYear(date: Int, yearDelta: String): String? {
-        var i = yearDelta.toIntOrNull()
-        var year = (date / 10000) - (i ?: 0)
-        var yearStr = "${year}".substring(2)
+    fun getYear(date: Int, yearDelta: String): String {
+        val i = yearDelta.toIntOrNull()
+        val year = (date / 10000) - (i ?: 0)
 
-        return yearStr;
+        return "$year".substring(2)
     }
 
     fun getZqtext1(bu: Int, date: Int): String? {
-        var code = getCode(bu, date)
+        val code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zqtext1
     }
 
     fun getZqtext2(bu: Int, date: Int): String? {
-        var code = getCode(bu, date)
+        val code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zqtext2
     }
 
     fun getZqtext3(bu: Int, date: Int): String? {
-        var code = getCode(bu, date)
+        val code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zqtext3
     }
 
     fun getZqtext4(bu: Int, date: Int): String? {
-        var code = getCode(bu, date)
+        val code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zqtext4
     }
 
     fun getPostalCd(bu: Int, date: Int): String? {
-        var code = getCode(bu, date);
+        val code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.postalCd
     }
 
     fun getZacOgrn(bu: Int, date: Int): String? {
-        var code = getCode(bu, date);
+        val code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zacOgrn
     }
 
     fun getZacInn(bu: Int, date: Int): String? {
-        var code = getCode(bu, date);
+        val code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zacInn
     }
 
     fun getZacOkpg(bu: Int, date: Int): String? {
-        var code = getCode(bu, date)
+        val code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zacOkpg
     }
 
     fun getZacOktmo(bu: Int, date: Int): String? {
-        var code = getCode(bu, date);
-        return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zacOktmo;
+        val code = getCode(bu, date)
+        return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zacOktmo
     }
     // endregion
 
@@ -112,7 +111,7 @@ class Fqr01(
     fun getZpersQty1(ztypeKf: String?, fiscPerMCount: Int): Double {
         val fiscPer = fiscDate(fiscPerMCount)
 //        val fiscPer = 2022009
-        var result = _models.filter {
+        val result = _models.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
                     it.fiscPer == fiscPer
         }.sumOf { it.zpersQty }
@@ -121,7 +120,7 @@ class Fqr01(
     }
 
     fun getZpersQty2(ztypeKf: String?, bus: List<Int>): Double {
-        var result = _models.filter {
+        val result = _models.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
                     bus.contains(it.compCode)
         }.sumOf { it.zpersQty }
@@ -132,7 +131,7 @@ class Fqr01(
     fun getZpersQty3(ztypeKf: String?, fiscPerMCount: Int, bus: List<Int>): Double {
         val fiscPer = fiscDate(fiscPerMCount)
 //       val fiscPer = 2022009
-        var result = _models.filter {
+        val result = _models.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
                     it.fiscPer == fiscPer &&
                     bus.contains(it.compCode)
@@ -144,7 +143,7 @@ class Fqr01(
     fun getZwrkHrs(ztypeKf: String?, fiscPerMCount: Int): Double {
         val fiscPer = fiscDate(fiscPerMCount)
 //        val fiscPer = 2022009
-        var result = _models.filter {
+        val result = _models.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
                     it.fiscPer == fiscPer
         }.sumOf { it.zwrkHrs }
@@ -169,7 +168,7 @@ class Fqr01(
         var curMonthStr = curMonth.toString()
         if (curMonth < 10) curMonthStr = "0$curMonthStr"
 
-        var sb = StringBuilder()
+        val sb = StringBuilder()
         sb.append(curYear).append("0").append(curMonthStr)
 
         return sb.toString().toInt()
@@ -186,14 +185,14 @@ class Fqr02(
     fun init(bu: Int) {
         if (_fqrModelsByBu.containsKey(bu)) return
         //
-        var v = data.fqrs02.filter { it.compCode == bu }
+        val v = data.fqrs02.filter { it.compCode == bu }
         if (v.isEmpty()) return
         //
         _fqrModelsByBu[bu] = v
     }
 
     fun getPeriod(): String {
-        var sbPeriod = StringBuilder()
+        val sbPeriod = StringBuilder()
         sbPeriod.append("0${getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt())}")
         sbPeriod.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt())
         return sbPeriod.toString()
@@ -212,8 +211,8 @@ class Fqr04(
     fun init(bu: Int) {
         if (_fqrModelsByBu.containsKey(bu)) return
         //
-        var v = data.fqrs04.filter { it.compCode == bu }
-        var v_02 = data.fqrs04_02.filter { it.compCode == bu }
+        val v = data.fqrs04.filter { it.compCode == bu }
+        val v_02 = data.fqrs04_02.filter { it.compCode == bu }
         if (v.isEmpty()) return
         //
         _fqrModelsByBu[bu] = v
@@ -222,7 +221,7 @@ class Fqr04(
     }
 
     fun getPeriod(): String {
-        var sbPeriod = StringBuilder()
+        val sbPeriod = StringBuilder()
         sbPeriod.append("0${getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt())}")
         sbPeriod.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt())
         return sbPeriod.toString()
@@ -231,7 +230,7 @@ class Fqr04(
     fun getZqkf01(bu: Int, ztypeKf: String, diapasonType: Int): Double? {
         if (!_fqrModelsByBu.containsKey(bu)) return 0.0
 
-        var result = _fqrModelsByBu[bu]?.filter {
+        val result = _fqrModelsByBu[bu]?.filter {
             it.ztypeKf.equals(ztypeKf, true) &&
                     it.fiscPer in getTimeRange(diapasonType)
         }?.sumOf { it.zqKf }
@@ -255,15 +254,15 @@ class Fqr04(
         return "нет значений"
     }
 
-    fun getZqText(bu: Int, diapasonType: Int): String? {
+    fun getZqText(bu: Int, diapasonType: Int): String {
         if (!_fqr04_02ModelsByBu.containsKey(bu))
             return "нет значений"
 
-        var models = _fqr04_02ModelsByBu[bu]?.filter {
+        val models = _fqr04_02ModelsByBu[bu]?.filter {
             it.compCode == bu &&
                     it.fiscPer in getTimeRange(diapasonType)
         }
-        var sb = StringBuilder()
+        val sb = StringBuilder()
         models?.forEach {
             if (it == models.last()) sb.append(it.zqText) else sb.append("${it.zqText}, ")
         }
@@ -271,11 +270,11 @@ class Fqr04(
         return sb.toString()
     }
 
-    fun getZacInn(bu: Int): Double? {
+    fun getZacInn(bu: Int): Double {
         if (_fqr04_02ModelsByBu[bu].isNullOrEmpty())
             return 0.0
 
-        var models = _fqr04_02ModelsByBu[bu]?.filter {
+        val models = _fqr04_02ModelsByBu[bu]?.filter {
             it.compCode == bu &&
                     it.fiscPer in getTimeRange(2)
         }
@@ -289,9 +288,9 @@ class Fqr04(
         if (_fqr04_02ModelsByBu[bu].isNullOrEmpty())
             return 0.0
 
-        var models = _fqr04_02ModelsByBu[bu]?.filter {
+        val models = _fqr04_02ModelsByBu[bu]?.filter {
             it.compCode == bu &&
-                    it.fiscPer in getTimeRange(2)
+                    it.fiscPer in getTimeRange(diapasonType)
         }
 
         //TODO Изменить возвращаемое значение после согласования.
@@ -347,7 +346,7 @@ class Fqr04(
     private fun getFiscLastMonthCurrentPeriod(): Int = getFiscMonthCurrentPeriod(0)
 
     private fun getFiscMonthCurrentPeriod(index: Int): Int {
-        var beginPeriodMonth =
+        val beginPeriodMonth =
             getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3 - index
         return if (beginPeriodMonth < 10)
             LocalDate.now().format(DateTimeFormatter.ofPattern("yyy00${beginPeriodMonth}")).toInt()
@@ -359,8 +358,8 @@ class Fqr04(
         "${(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1)}001".toInt()
 
     private fun getFiscLastMonthCurrentPeriodPreviousYear(): Int {
-        var previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
-        var lastMonthOfPeriod =
+        val previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
+        val lastMonthOfPeriod =
             getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3
         return if (lastMonthOfPeriod < 10)
             "${previousYear}00${lastMonthOfPeriod}".toInt()
@@ -369,8 +368,8 @@ class Fqr04(
     }
 
     private fun getFiscBeginCurrentPeriodPreviousYear(): Int {
-        var previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
-        var firstMonthOfPeriod =
+        val previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
+        val firstMonthOfPeriod =
             getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3 - 2
         return if (firstMonthOfPeriod < 10)
             "${previousYear}00${firstMonthOfPeriod}".toInt()
@@ -391,10 +390,10 @@ class Fqr10(
         _models = data.fqrs10.filter { _bus.containsKey(it.compCode) }
     }
 
-    fun getAmount(ztypeKf: String?): Double? {
-        var result = _models.filter { it.ztypeKf.equals(ztypeKf, ignoreCase = true) }?.sumOf { it.amount };
+    fun getAmount(ztypeKf: String?): Double {
+        val result = _models.filter { it.ztypeKf.equals(ztypeKf, ignoreCase = true) }.sumOf { it.amount }
 
-        return if (result == null) null else result / AmountK
+        return result / AmountK
     }
     // endregion
 }
@@ -405,9 +404,9 @@ class Fqr11(
 ) : BaseCalculationBuilder(data) {
     // region api
     fun init(bu: Int) {
-        if (_fqrModelsByBu.containsKey(bu)) return;
+        if (_fqrModelsByBu.containsKey(bu)) return
         //
-        var v = data.fqrs11.filter { it.compCode == bu }
+        val v = data.fqrs11.filter { it.compCode == bu }
         if (v.isEmpty()) return
         //
         _fqrModelsByBu[bu] = v
@@ -416,7 +415,7 @@ class Fqr11(
     fun getAmount(bu: Int, ztypeKf: String): Double? {
         if (!_fqrModelsByBu.containsKey(bu)) return null
         //
-        var result = _fqrModelsByBu[bu]?.filter { it.ztypeKf.equals(ztypeKf, ignoreCase = true) }?.sumOf { it.amount }
+        val result = _fqrModelsByBu[bu]?.filter { it.ztypeKf.equals(ztypeKf, ignoreCase = true) }?.sumOf { it.amount }
 
         return if (result == null) null else result / AmountK
     }
