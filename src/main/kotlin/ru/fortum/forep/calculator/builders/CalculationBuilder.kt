@@ -8,6 +8,7 @@ class CalculationBuilder(
     data: Data,
     val attr: Attr = Attr(data),
     val fqr01: Fqr01 = Fqr01(data),
+    val fqr02: Fqr02 = Fqr02(data),
     val fqr04: Fqr04 = Fqr04(data),
     val fqr10: Fqr10 = Fqr10(data),
     val fqr11: Fqr11 = Fqr11(data)
@@ -177,6 +178,30 @@ class Fqr01(
     // endregion
 }
 
+class Fqr02(
+    data: Data,
+    private val _fqrModelsByBu: MutableMap<Int, List<FqrModel02>> = mutableMapOf(),
+) : BaseCalculationBuilder(data) {
+    // region api
+    fun init(bu: Int) {
+        if (_fqrModelsByBu.containsKey(bu)) return
+        //
+        var v = data.fqrs02.filter { it.compCode == bu }
+        if (v.isEmpty()) return
+        //
+        _fqrModelsByBu[bu] = v
+    }
+
+    fun getPeriod(): String {
+        var sbPeriod = StringBuilder()
+        sbPeriod.append("0${getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt())}")
+        sbPeriod.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt())
+        return sbPeriod.toString()
+    }
+
+    // endregion
+}
+
 class Fqr04(
     data: Data,
     private val _fqrModelsByBu: MutableMap<Int, List<FqrModel04>> = mutableMapOf(),
@@ -281,16 +306,6 @@ class Fqr04(
         CURRENT_PERIOD_CURRENT_YEAR(2),
         FIRST_MONTH_PREVIOUS_YEAR_TO_CURRENT_PERIOD_PREVIOUS_YEAR(3),
         CURRENT_PERIOD_PREVIOUS_YEAR(4)
-    }
-
-    private fun getPeriodFromMonth(month: Int): Int {
-        return when (month) {
-            in 1..3 -> 1
-            in 4..6 -> 2
-            in 7..9 -> 3
-            in 10..12 -> 4
-            else -> 0
-        }
     }
 
     private fun getTimeRange(diapasonIndex: Int): IntRange {
@@ -406,6 +421,16 @@ class Fqr11(
         return if (result == null) null else result / AmountK
     }
 // endregion
+}
+
+private fun getPeriodFromMonth(month: Int): Int {
+    return when (month) {
+        in 1..3 -> 1
+        in 4..6 -> 2
+        in 7..9 -> 3
+        in 10..12 -> 4
+        else -> 0
+    }
 }
 
 

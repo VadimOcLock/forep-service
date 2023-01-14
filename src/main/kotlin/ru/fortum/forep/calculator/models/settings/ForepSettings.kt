@@ -69,7 +69,6 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                     "л.2 расчет",
                     "Сведения о неполн. занят. и дви",
                     "титульный лист",
-
                 ),
                 sourceFormulaColumn = 5,
                 sourceValueColumn   = 11,
