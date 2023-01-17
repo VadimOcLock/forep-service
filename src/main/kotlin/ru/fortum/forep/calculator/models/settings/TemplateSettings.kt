@@ -20,11 +20,20 @@ class TemplateSettings(var calcType: Int,
                        var calculatedSheets: List<String>,
                        var execDates: List<String>,
                        var businessUnits: List<Int>,
-                       var dataFiles: List<ru.fortum.forep.calculator.models.settings.DataFile>)
+                       var dataFiles: List<ru.fortum.forep.calculator.models.settings.DataFile>,
+                       var businessUnitsPersonals: List<List<BusinessUnitsPersonal>>?)
 {
     fun clone(): TemplateSettings {
 
         val json = Json.encodeToString(this)
         return Json.decodeFromString(json)
     }
+}
+
+@Serializable
+class BusinessUnitsPersonal(
+    val bu: Int,
+    val rps: List<Int>
+) {
+
 }

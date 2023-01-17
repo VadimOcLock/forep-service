@@ -70,6 +70,7 @@ class CsvParser(val data: Data = Data()) {
                 zacInn = l[6],
                 zacOgrn = l[8],
                 zacOkpg = l[13],
+                zacOkpo = l[14],
                 zacOktmo = l[15],
                 zqtext1 = l[18],
                 zqtext2 = l[19],

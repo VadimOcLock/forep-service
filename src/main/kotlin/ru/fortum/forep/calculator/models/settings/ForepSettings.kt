@@ -50,6 +50,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                         )
                     )
                 ),
+                businessUnitsPersonals = listOf()
             )
             // 2
             val report02 = TemplateSettings(
@@ -60,7 +61,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                 templateName     = "2_Сведения_о_неполной_занятости_и_движении_работников.xlsx",
                 code             = "Отчет по отсутствиям",
                 outputDirectory  = "2_Сведения_о_неполной_занятости_и_движении_работников",
-                outputFileName   = "Сведения о неполной занятости и движении работников.xlsx",
+                outputFileName   = "Сведения о неполной занятости и движении работников БЕ %BUSINESS_UNIT%.xlsx",
                 sourceSheetName  = "показатели расчет",
                 calculatedSheets = listOf(
                     "л.1 расчет",
@@ -69,9 +70,9 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                     "титульный лист"
                 ),
                 sourceFormulaColumn = 5,
-                sourceValueColumn   = 11,
+                sourceValueColumn   = 9,
                 baseBusinessUnit    = 1000,
-                businessUnits       = listOf(1000, 1100, 1200, 1300, 1400, 1600, 1900, 2100, 2200, 2600, 2900, 3000, 3500, 4400, 5000, 7100, 7900),
+                businessUnits       = listOf(),
                 dataFiles = listOf(
                     DataFile(
                         file = ru.fortum.forep.calculator.models.FileModel(
@@ -90,11 +91,39 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                         )
                     )
                 ),
+                businessUnitsPersonals = listOf(
+                    listOf(BusinessUnitsPersonal(1000, listOf(1033))),
+                    listOf(BusinessUnitsPersonal(1000, listOf(1077, 1085))),
+                    listOf(BusinessUnitsPersonal(1000, listOf(1020, 1040))),
+                    listOf(BusinessUnitsPersonal(7900, listOf(7930))),
+                    listOf(BusinessUnitsPersonal(7100, listOf(7110)), BusinessUnitsPersonal(7900, listOf(7910))),
+                    listOf(BusinessUnitsPersonal(7900, listOf(7920))),
+                    listOf(BusinessUnitsPersonal(7900, listOf(7950))),
+                    listOf(BusinessUnitsPersonal(7900, listOf(7940))),
+                    listOf(BusinessUnitsPersonal(1400, listOf())),
+                    listOf(BusinessUnitsPersonal(1100, listOf())),
+                    listOf(BusinessUnitsPersonal(1200, listOf())),
+                    listOf(BusinessUnitsPersonal(1300, listOf())),
+                    listOf(BusinessUnitsPersonal(1600, listOf())),
+                    listOf(BusinessUnitsPersonal(1900, listOf())),
+                    listOf(BusinessUnitsPersonal(2900, listOf())),
+                    listOf(BusinessUnitsPersonal(2100, listOf())),
+                    listOf(BusinessUnitsPersonal(2200, listOf())),
+                    listOf(BusinessUnitsPersonal(2600, listOf())),
+                    listOf(BusinessUnitsPersonal(5000, listOf(5010, 5040, 5050, 5060, 5070))),
+                    listOf(BusinessUnitsPersonal(5000, listOf(5080))),
+                    listOf(BusinessUnitsPersonal(5000, listOf(5030))),
+                    listOf(BusinessUnitsPersonal(5000, listOf(5090))),
+                    listOf(BusinessUnitsPersonal(5000, listOf(5095))),
+                    listOf(BusinessUnitsPersonal(3000, listOf())),
+                    listOf(BusinessUnitsPersonal(3500, listOf())),
+                    listOf(BusinessUnitsPersonal(4400, listOf())),
+                )
             )
             // 4
             val report04 = TemplateSettings(
                 calcType         = 4,
-                isCalculated     = true,
+                isCalculated     = false,
                 isDebugMode      = true,
                 execDates        = listOf("14.12"),
                 templateName     = "4T_Форма_П_2_сведения_об_инвестициях_в_нефинансовые_активы_new.xlsx",
@@ -146,6 +175,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                         )
                     )
                 ),
+                businessUnitsPersonals = listOf()
             )
             // 10
             val report101 = TemplateSettings(
@@ -184,6 +214,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                                 )
                             )
                         ),
+                businessUnitsPersonals = listOf()
                     )
             val report102 = report101.clone()
             report102.businessUnits = listOf(1100, 1200, 1300, 1400, 1600, 1900)
@@ -199,7 +230,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
             // 11
             val report11 = TemplateSettings(
                         calcType            = 11,
-                        isCalculated        = true,
+                        isCalculated        = false,
                         isDebugMode         = true,
                         execDates           = listOf("03.25"),
                         templateName        = "11_Сведения_о_затратах_на_производство.xlsx",
@@ -234,6 +265,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                                 )
                             )
                         ),
+                businessUnitsPersonals = listOf()
             )
 
             return listOf(

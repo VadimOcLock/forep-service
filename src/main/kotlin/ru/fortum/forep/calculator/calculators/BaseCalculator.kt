@@ -33,24 +33,24 @@ open class BaseCalculator(var currentDateInt: Int = 0,
         }
         fun setCellValue(cell: Cell, result:Any)
         {
-            if (result == null) return;
+            if (result == null) return
             //
             if (result is String)
             {
-                cell.setCellType(CellType.STRING);
-                cell.setCellValue(result as String);
+                cell.setCellType(CellType.STRING)
+                cell.setCellValue(result as String)
             }
             else if (result is Double)
             {
-                cell.setCellType(CellType.NUMERIC);
-                cell.setCellValue(result as Double);
+                cell.setCellType(CellType.NUMERIC)
+                cell.setCellValue(result as Double)
             }
         }
         fun getEvaluator(workbook : XSSFWorkbook): XSSFFormulaEvaluator
         {
-            var evaluator = XSSFFormulaEvaluator(workbook);
+            var evaluator = XSSFFormulaEvaluator(workbook)
 
-            return evaluator;
+            return evaluator
         }
     }
     // region api
@@ -59,14 +59,14 @@ open class BaseCalculator(var currentDateInt: Int = 0,
                        templateStream: ByteArrayInputStream
     ):List<ru.fortum.forep.calculator.models.CalculationResult>?
     {
-        return null;
+        return null
     }
     /// <summary> format: 20171001 </summary>
     protected fun getCurrentDate():Int
     {
         var date = OffsetDateTime.now(ZoneOffset.UTC)
 
-        return date.year * 10000 + date.monthValue * 100 + date.dayOfMonth;
+        return date.year * 10000 + date.monthValue * 100 + date.dayOfMonth
     }
     protected fun isCellCustomFormula(row: Row, sourceValueColumn: Int):Cell?
     {
@@ -86,18 +86,18 @@ open class BaseCalculator(var currentDateInt: Int = 0,
         if (!cellsDict.containsKey(addressColumnIndex)) return null
         if (!cellsDict.containsKey(valueColumnIndex))   return null
         //
-        var valueCell = cellsDict[valueColumnIndex];
-        if (valueCell?.cellStyle?.fillBackgroundColorColor == null) return null;
+        var valueCell = cellsDict[valueColumnIndex]
+        if (valueCell?.cellStyle?.fillBackgroundColorColor == null) return null
         //
-        var addressCell = cellsDict[addressColumnIndex];
+        var addressCell = cellsDict[addressColumnIndex]
         if (addressCell?.cellType == CellType.FORMULA)
-            evaluator.evaluateInCell(addressCell);
-        var str = TypeMapper.getStringValue(addressCell);
+            evaluator.evaluateInCell(addressCell)
+        var str = TypeMapper.getStringValue(addressCell)
 
         var isContainsLetter = str?.toCharArray()?.any { it.isLetter() }
-        if (isContainsLetter != null && isContainsLetter) return null;
+        if (isContainsLetter != null && isContainsLetter) return null
         //
-        var result = ru.fortum.forep.calculator.models.RowDataCells(addressCell = addressCell, valueCell = valueCell);
+        var result = ru.fortum.forep.calculator.models.RowDataCells(addressCell = addressCell, valueCell = valueCell)
         if (str != null)
             if (str.contains(".") || str.contains(","))
                 return result
@@ -120,7 +120,7 @@ open class BaseCalculator(var currentDateInt: Int = 0,
     }
     protected fun evaluateCell(bu: Int, row: Row, sourceValueColumn: Int, evaluator: XSSFFormulaEvaluator)
     {
-        var cell = isCellCustomFormula(row, sourceValueColumn) ?: return;
+        var cell = isCellCustomFormula(row, sourceValueColumn) ?: return
         //
         var result = formulaParser!!.parse(cell.stringCellValue, bu, currentDateInt)
         if (result == null) return
@@ -137,7 +137,7 @@ open class BaseCalculator(var currentDateInt: Int = 0,
         {
             var result = getResult(i, sheet, evaluator,
                                    settings.sourceFormulaColumn, settings.sourceValueColumn)
-            if (result == null) continue;
+            if (result == null) continue
             //
             results.add(result)
         }

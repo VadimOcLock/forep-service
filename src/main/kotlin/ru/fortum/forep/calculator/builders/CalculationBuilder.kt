@@ -1,6 +1,7 @@
 package ru.fortum.forep.calculator.builders
 
 import ru.fortum.forep.calculator.models.*
+import ru.fortum.forep.calculator.models.settings.BusinessUnitsPersonal
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
@@ -90,6 +91,11 @@ class Attr(data: Data) : BaseCalculationBuilder(data) {
         val code = getCode(bu, date)
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zacOktmo
     }
+
+    fun getZacOkpo(bu: Int, date: Int): String? {
+        val code = getCode(bu, date)
+        return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]?.zacOkpo
+    }
     // endregion
 
     // region methods
@@ -100,8 +106,7 @@ class Attr(data: Data) : BaseCalculationBuilder(data) {
 }
 
 class Fqr01(
-    data: Data,
-    private var _models: List<FqrModel01> = mutableListOf()
+    data: Data, private var _models: List<FqrModel01> = mutableListOf()
 ) : BaseCalculationBuilder(data) {
     // region api
     fun init() {
@@ -112,8 +117,7 @@ class Fqr01(
         val fiscPer = fiscDate(fiscPerMCount)
 //        val fiscPer = 2022009
         val result = _models.filter {
-            it.ztypeKf.equals(ztypeKf, true) &&
-                    it.fiscPer == fiscPer
+            it.ztypeKf.equals(ztypeKf, true) && it.fiscPer == fiscPer
         }.sumOf { it.zpersQty }
 
         return result
@@ -121,8 +125,7 @@ class Fqr01(
 
     fun getZpersQty2(ztypeKf: String?, bus: List<Int>): Double {
         val result = _models.filter {
-            it.ztypeKf.equals(ztypeKf, true) &&
-                    bus.contains(it.compCode)
+            it.ztypeKf.equals(ztypeKf, true) && bus.contains(it.compCode)
         }.sumOf { it.zpersQty }
 
         return result
@@ -132,9 +135,7 @@ class Fqr01(
         val fiscPer = fiscDate(fiscPerMCount)
 //       val fiscPer = 2022009
         val result = _models.filter {
-            it.ztypeKf.equals(ztypeKf, true) &&
-                    it.fiscPer == fiscPer &&
-                    bus.contains(it.compCode)
+            it.ztypeKf.equals(ztypeKf, true) && it.fiscPer == fiscPer && bus.contains(it.compCode)
         }.sumOf { it.zpersQty }
 
         return result
@@ -144,8 +145,7 @@ class Fqr01(
         val fiscPer = fiscDate(fiscPerMCount)
 //        val fiscPer = 2022009
         val result = _models.filter {
-            it.ztypeKf.equals(ztypeKf, true) &&
-                    it.fiscPer == fiscPer
+            it.ztypeKf.equals(ztypeKf, true) && it.fiscPer == fiscPer
         }.sumOf { it.zwrkHrs }
 
         return result
@@ -179,16 +179,26 @@ class Fqr01(
 
 class Fqr02(
     data: Data,
-    private val _fqrModelsByBu: MutableMap<Int, List<FqrModel02>> = mutableMapOf(),
+    private var _fqrModels: List<FqrModel02> = mutableListOf(),
 ) : BaseCalculationBuilder(data) {
     // region api
-    fun init(bu: Int) {
-        if (_fqrModelsByBu.containsKey(bu)) return
-        //
-        val v = data.fqrs02.filter { it.compCode == bu }
-        if (v.isEmpty()) return
-        //
-        _fqrModelsByBu[bu] = v
+    fun init(bu: List<BusinessUnitsPersonal>) {
+        val bus = mutableListOf<Int>()
+        val rps = mutableListOf<Int>()
+
+        for (buUnit in bu) {
+            bus.add(buUnit.bu)
+            if (bu.isNotEmpty())
+                rps.addAll(buUnit.rps)
+        }
+
+        _fqrModels = data.fqrs02.filter {
+            bus.contains(it.compCode) && rps.contains(
+                if (it.persArea != "") it.persArea.toInt() else true
+            )
+        }
+
+        if (_fqrModels.isEmpty()) return
     }
 
     fun getPeriod(): String {
@@ -196,6 +206,14 @@ class Fqr02(
         sbPeriod.append("0${getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt())}")
         sbPeriod.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt())
         return sbPeriod.toString()
+    }
+
+    fun getZpersQty(ztypeKf: String): String {
+
+        return _fqrModels.filter {
+            it.ztypeKf == ztypeKf &&
+                it.fiscPer == getActualFiscPeriod()
+        }.sumOf { it.zpersQty }.toString()
     }
 
     // endregion
@@ -231,8 +249,7 @@ class Fqr04(
         if (!_fqrModelsByBu.containsKey(bu)) return 0.0
 
         val result = _fqrModelsByBu[bu]?.filter {
-            it.ztypeKf.equals(ztypeKf, true) &&
-                    it.fiscPer in getTimeRange(diapasonType)
+            it.ztypeKf.equals(ztypeKf, true) && it.fiscPer in getTimeRange(diapasonType)
         }?.sumOf { it.zqKf }
 
         return if (result == null) null else result / 1000
@@ -255,12 +272,10 @@ class Fqr04(
     }
 
     fun getZqText(bu: Int, diapasonType: Int): String {
-        if (!_fqr04_02ModelsByBu.containsKey(bu))
-            return "нет значений"
+        if (!_fqr04_02ModelsByBu.containsKey(bu)) return "нет значений"
 
         val models = _fqr04_02ModelsByBu[bu]?.filter {
-            it.compCode == bu &&
-                    it.fiscPer in getTimeRange(diapasonType)
+            it.compCode == bu && it.fiscPer in getTimeRange(diapasonType)
         }
         val sb = StringBuilder()
         models?.forEach {
@@ -271,12 +286,10 @@ class Fqr04(
     }
 
     fun getZacInn(bu: Int): Double {
-        if (_fqr04_02ModelsByBu[bu].isNullOrEmpty())
-            return 0.0
+        if (_fqr04_02ModelsByBu[bu].isNullOrEmpty()) return 0.0
 
         val models = _fqr04_02ModelsByBu[bu]?.filter {
-            it.compCode == bu &&
-                    it.fiscPer in getTimeRange(2)
+            it.compCode == bu && it.fiscPer in getTimeRange(2)
         }
 
         //TODO Изменить возвращаемое значение после согласования.
@@ -285,12 +298,10 @@ class Fqr04(
     }
 
     fun getAmount(bu: Int, diapasonType: Int): Double {
-        if (_fqr04_02ModelsByBu[bu].isNullOrEmpty())
-            return 0.0
+        if (_fqr04_02ModelsByBu[bu].isNullOrEmpty()) return 0.0
 
         val models = _fqr04_02ModelsByBu[bu]?.filter {
-            it.compCode == bu &&
-                    it.fiscPer in getTimeRange(diapasonType)
+            it.compCode == bu && it.fiscPer in getTimeRange(diapasonType)
         }
 
         //TODO Изменить возвращаемое значение после согласования.
@@ -330,16 +341,7 @@ class Fqr04(
     }
 
     private fun getFiscBeginOfYear(): Int = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy001")).toInt()
-    private fun getFiscPeriodOfCurrentYear(): Int =
-        LocalDate.now().format(
-            DateTimeFormatter.ofPattern(
-                "yyy00${
-                    getPeriodFromMonth(
-                        LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()
-                    )
-                }"
-            )
-        ).toInt()
+    private fun getFiscPeriodOfCurrentYear(): Int = getActualFiscPeriod()
 
     private fun getFiscFirstMonthCurrentPeriod(): Int = getFiscMonthCurrentPeriod(2)
 
@@ -348,10 +350,9 @@ class Fqr04(
     private fun getFiscMonthCurrentPeriod(index: Int): Int {
         val beginPeriodMonth =
             getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3 - index
-        return if (beginPeriodMonth < 10)
-            LocalDate.now().format(DateTimeFormatter.ofPattern("yyy00${beginPeriodMonth}")).toInt()
-        else
-            LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0${beginPeriodMonth}")).toInt()
+        return if (beginPeriodMonth < 10) LocalDate.now()
+            .format(DateTimeFormatter.ofPattern("yyy00${beginPeriodMonth}")).toInt()
+        else LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0${beginPeriodMonth}")).toInt()
     }
 
     private fun getFiscFirstMonthPreviousYear(): Int =
@@ -361,20 +362,16 @@ class Fqr04(
         val previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
         val lastMonthOfPeriod =
             getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3
-        return if (lastMonthOfPeriod < 10)
-            "${previousYear}00${lastMonthOfPeriod}".toInt()
-        else
-            "${previousYear}0${lastMonthOfPeriod}".toInt()
+        return if (lastMonthOfPeriod < 10) "${previousYear}00${lastMonthOfPeriod}".toInt()
+        else "${previousYear}0${lastMonthOfPeriod}".toInt()
     }
 
     private fun getFiscBeginCurrentPeriodPreviousYear(): Int {
         val previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
         val firstMonthOfPeriod =
             getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3 - 2
-        return if (firstMonthOfPeriod < 10)
-            "${previousYear}00${firstMonthOfPeriod}".toInt()
-        else
-            "${previousYear}0${firstMonthOfPeriod}".toInt()
+        return if (firstMonthOfPeriod < 10) "${previousYear}00${firstMonthOfPeriod}".toInt()
+        else "${previousYear}0${firstMonthOfPeriod}".toInt()
     }
     // endregion
 }
@@ -399,8 +396,7 @@ class Fqr10(
 }
 
 class Fqr11(
-    data: Data,
-    private val _fqrModelsByBu: MutableMap<Int, List<FqrModel11>> = mutableMapOf()
+    data: Data, private val _fqrModelsByBu: MutableMap<Int, List<FqrModel11>> = mutableMapOf()
 ) : BaseCalculationBuilder(data) {
     // region api
     fun init(bu: Int) {
@@ -431,6 +427,16 @@ private fun getPeriodFromMonth(month: Int): Int {
         else -> 0
     }
 }
+
+private fun getActualFiscPeriod(): Int = LocalDate.now().format(
+    DateTimeFormatter.ofPattern(
+        "yyy00${
+            getPeriodFromMonth(
+                LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()
+            )
+        }"
+    )
+).toInt()
 
 
 

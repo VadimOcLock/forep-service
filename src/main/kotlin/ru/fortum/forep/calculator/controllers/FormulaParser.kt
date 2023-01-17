@@ -105,6 +105,8 @@ class FormulaParser(calculation: CalculationBuilder,
                 return _calculation.attr.getZacOkpg(getBu(m), m.date)
             if (m.execMethod == "zacoktmo")
                 return _calculation.attr.getZacOktmo(getBu(m), m.date)
+            if (m.execMethod == "zacokpo")
+                return _calculation.attr.getZacOkpo(getBu(m), m.date)
         }
         else if (m.execClass == FqrName01)
         {
@@ -141,6 +143,12 @@ class FormulaParser(calculation: CalculationBuilder,
         {
             if (m.execMethod == "period")
                 return _calculation.fqr02.getPeriod()
+            if (m.execMethod == "zpersqty")
+            {
+                val parameters = parseParameters(m.parameters) ?: return null
+                return _calculation.fqr02.getZpersQty(parameters[0])
+            }
+
         }
         else if (m.execClass == FqrName04)
         {
