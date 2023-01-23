@@ -39,6 +39,13 @@ class Attr(data: Data) : BaseCalculationBuilder(data) {
         return if (!_attrModelsByDate.containsKey(code)) null else _attrModelsByDate[code]
     }
 
+    fun getPeriod(): String {
+        val sbPeriod = StringBuilder()
+        sbPeriod.append("0${getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt())}")
+        sbPeriod.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt())
+        return sbPeriod.toString()
+    }
+
     /// <summary>  </summary>
     fun getYear(date: Int, yearDelta: String): String {
         val i = yearDelta.toIntOrNull()
@@ -201,13 +208,6 @@ class Fqr02(
         if (_fqrModels.isEmpty()) return
     }
 
-    fun getPeriod(): String {
-        val sbPeriod = StringBuilder()
-        sbPeriod.append("0${getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt())}")
-        sbPeriod.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt())
-        return sbPeriod.toString()
-    }
-
     fun getZpersQty(ztypeKf: String): String {
 
         return _fqrModels.filter {
@@ -236,13 +236,6 @@ class Fqr04(
         _fqrModelsByBu[bu] = v
         _fqrOKVEDModelsByBu = data.fqrs04OKVED.associateBy { it.compCode }
         _fqr04_02ModelsByBu[bu] = v_02
-    }
-
-    fun getPeriod(): String {
-        val sbPeriod = StringBuilder()
-        sbPeriod.append("0${getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt())}")
-        sbPeriod.append(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt())
-        return sbPeriod.toString()
     }
 
     fun getZqkf01(bu: Int, ztypeKf: String, diapasonType: Int): Double? {

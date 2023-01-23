@@ -87,6 +87,8 @@ class FormulaParser(calculation: CalculationBuilder,
                 val parameters = parseParameters(m.parameters) ?: return null
                 return _calculation.attr.getYear(m.date, parameters[0])
             }
+            if (m.execMethod == "period")
+                return _calculation.attr.getPeriod()
             if (m.execMethod == "postalcd")
                 return _calculation.attr.getPostalCd(getBu(m), m.date)
             if (m.execMethod == "zqtext1")
@@ -141,8 +143,6 @@ class FormulaParser(calculation: CalculationBuilder,
         }
         else if (m.execClass == FqrName02)
         {
-            if (m.execMethod == "period")
-                return _calculation.fqr02.getPeriod()
             if (m.execMethod == "zpersqty")
             {
                 val parameters = parseParameters(m.parameters) ?: return null
@@ -152,8 +152,6 @@ class FormulaParser(calculation: CalculationBuilder,
         }
         else if (m.execClass == FqrName04)
         {
-            if (m.execMethod == "period")
-                return _calculation.fqr04.getPeriod()
             if (m.execMethod == "zqkf01")
             {
                 val parameters = parseParameters(m.parameters) ?: return null
