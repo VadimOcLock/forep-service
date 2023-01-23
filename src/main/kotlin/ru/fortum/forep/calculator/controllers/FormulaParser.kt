@@ -8,6 +8,7 @@ class FormulaParser(calculation: CalculationBuilder,
                         AttrName  to AttrName,
                         FqrName01 to FqrName01,
                         FqrName02 to FqrName02,
+                        FqrName03 to FqrName03,
                         FqrName04 to FqrName04,
                         FqrName10 to  FqrName10,
                         FqrName11 to  FqrName11
@@ -19,6 +20,7 @@ class FormulaParser(calculation: CalculationBuilder,
         const val AttrName:String  = "attr"
         const val FqrName01:String = "fqr01"
         const val FqrName02:String = "fqr02"
+        const val FqrName03:String = "fqr03"
         const val FqrName04:String = "fqr04"
         const val FqrName10:String = "fqr10"
         const val FqrName11:String = "fqr11"
@@ -147,6 +149,15 @@ class FormulaParser(calculation: CalculationBuilder,
             {
                 val parameters = parseParameters(m.parameters) ?: return null
                 return _calculation.fqr02.getZpersQty(parameters[0])
+            }
+
+        }
+        else if (m.execClass == FqrName03)
+        {
+            if (m.execMethod == "zqtext1")
+            {
+                val parameters = parseParameters(m.parameters) ?: return null
+                return _calculation.fqr03.getZqtxext1()
             }
 
         }

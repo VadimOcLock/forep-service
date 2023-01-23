@@ -10,6 +10,7 @@ class CalculationBuilder(
     val attr: Attr = Attr(data),
     val fqr01: Fqr01 = Fqr01(data),
     val fqr02: Fqr02 = Fqr02(data),
+    val fqr03: Fqr03 = Fqr03(data),
     val fqr04: Fqr04 = Fqr04(data),
     val fqr10: Fqr10 = Fqr10(data),
     val fqr11: Fqr11 = Fqr11(data)
@@ -215,6 +216,47 @@ class Fqr02(
                 it.fiscPer == getActualFiscPeriod()
         }.sumOf { it.zpersQty }.toString()
     }
+
+    // endregion
+}
+
+class Fqr03(
+    data: Data,
+    private var _fqrModels: List<FqrModel03> = mutableListOf(),
+    private var _fqrModelsOKVED: List<FqrModel03OKVED> = mutableListOf(),
+) : BaseCalculationBuilder(data) {
+    // region api
+    fun init(bu: List<BusinessUnitsPersonal>) {
+        val bus = mutableListOf<Int>()
+        val rps = mutableListOf<Int>()
+
+        for (buUnit in bu) {
+            bus.add(buUnit.bu)
+            if (bu.isNotEmpty())
+                rps.addAll(buUnit.rps)
+        }
+
+        _fqrModels = data.fqrs03.filter {
+            bus.contains(it.compCode) && rps.contains(
+                if (it.persArea != "") it.persArea.toInt() else true
+            )
+        }
+
+        _fqrModelsOKVED = data.fqrs03OKVED.filter { bus.contains(it.compCode) }
+    }
+
+    fun getZqtxext1(): String {
+        val result = StringBuilder()
+        return if (_fqrModelsOKVED.isNotEmpty()) {
+            _fqrModelsOKVED.forEach {
+                result.append(it.zacOkved)
+                    .append(", ")
+            }
+            result.toString()
+        } else "нет значений"
+    }
+
+
 
     // endregion
 }

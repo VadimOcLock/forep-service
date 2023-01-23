@@ -128,12 +128,12 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                 execDates        = listOf( "23.01"),
                 templateName     = "3_Сведения_о_численности,_заработной_плате_и_движении_работников2.xlsx",
                 code             = "Сведения о численности",
-                outputDirectory  = "3_Сведения_о_численности,_заработной_плате_и_движении_работников",
+                outputDirectory  = "3_Сведения_о_численности,_заработной_плате_и_движении_работников2",
                 outputFileName   = "3 Сведения о численности, заработной_плате и движении работников2 БЕ %BUSINESS_UNIT%.xlsx",
                 sourceSheetName  = "показатели расчет",
                 calculatedSheets = listOf(
-                    "л.1 расчет",
                     "л.2 расчет",
+                    "л.1 расчет",
                     "Форма П-4",
                     "Титул_П-4"
                 ),
@@ -167,7 +167,34 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                         )
                     ),
                 ),
-                businessUnitsPersonals = listOf()
+                businessUnitsPersonals = listOf(
+                    listOf(BusinessUnitsPersonal(1000, listOf(1033))),
+                    listOf(BusinessUnitsPersonal(1000, listOf(1077, 1085))),
+                    listOf(BusinessUnitsPersonal(1000, listOf(1020, 1040))),
+                    listOf(BusinessUnitsPersonal(7900, listOf(7930))),
+                    listOf(BusinessUnitsPersonal(7100, listOf(7110)), BusinessUnitsPersonal(7900, listOf(7910))),
+                    listOf(BusinessUnitsPersonal(7900, listOf(7920))),
+                    listOf(BusinessUnitsPersonal(7900, listOf(7950))),
+                    listOf(BusinessUnitsPersonal(7900, listOf(7940))),
+                    listOf(BusinessUnitsPersonal(1400, listOf())),
+                    listOf(BusinessUnitsPersonal(1100, listOf())),
+                    listOf(BusinessUnitsPersonal(1200, listOf())),
+                    listOf(BusinessUnitsPersonal(1300, listOf())),
+                    listOf(BusinessUnitsPersonal(1600, listOf())),
+                    listOf(BusinessUnitsPersonal(1900, listOf())),
+                    listOf(BusinessUnitsPersonal(2900, listOf())),
+                    listOf(BusinessUnitsPersonal(2100, listOf())),
+                    listOf(BusinessUnitsPersonal(2200, listOf())),
+                    listOf(BusinessUnitsPersonal(2600, listOf())),
+                    listOf(BusinessUnitsPersonal(5000, listOf(5010, 5040, 5050, 5060, 5070))),
+                    listOf(BusinessUnitsPersonal(5000, listOf(5080))),
+                    listOf(BusinessUnitsPersonal(5000, listOf(5030))),
+                    listOf(BusinessUnitsPersonal(5000, listOf(5090))),
+                    listOf(BusinessUnitsPersonal(5000, listOf(5095))),
+                    listOf(BusinessUnitsPersonal(3000, listOf())),
+                    listOf(BusinessUnitsPersonal(3500, listOf())),
+                    listOf(BusinessUnitsPersonal(4400, listOf())),
+                )
             )
 
 

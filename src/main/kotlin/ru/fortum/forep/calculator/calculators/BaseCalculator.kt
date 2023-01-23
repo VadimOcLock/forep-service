@@ -25,6 +25,7 @@ open class BaseCalculator(var currentDateInt: Int = 0,
             return when (type) {
                 1 -> Calculator01()
                 2 -> Calculator02()
+                3 -> Calculator03()
                 4 -> Calculator04()
                 10 -> Calculator10()
                 11 -> Calculator11()
