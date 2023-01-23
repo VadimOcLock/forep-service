@@ -35,6 +35,15 @@ open class FqrModel03(
     var zpersQty: Double
 )
 
+open class FqrModel03OKVED(
+    var zacOkved: String,
+    var compCode: Int,
+    var zqText1: String,
+    var zqText2: String,
+    var zqText3: String,
+    var zqText4: String,
+)
+
 open class FqrModel04(
     var compCode: Int,
     var fiscPer: Int,
