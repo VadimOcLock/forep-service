@@ -55,7 +55,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
             // 2
             val report02 = TemplateSettings(
                 calcType         = 2,
-                isCalculated     = true,
+                isCalculated     = false,
                 isDebugMode      = true,
                 execDates        = listOf( "13.01"),
                 templateName     = "2_Сведения_о_неполной_занятости_и_движении_работников.xlsx",
@@ -120,6 +120,57 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                     listOf(BusinessUnitsPersonal(4400, listOf())),
                 )
             )
+            //3
+            val report03 = TemplateSettings(
+                calcType         = 3,
+                isCalculated     = true,
+                isDebugMode      = true,
+                execDates        = listOf( "23.01"),
+                templateName     = "3_Сведения_о_численности,_заработной_плате_и_движении_работников2.xlsx",
+                code             = "Сведения о численности",
+                outputDirectory  = "3_Сведения_о_численности,_заработной_плате_и_движении_работников",
+                outputFileName   = "3 Сведения о численности, заработной_плате и движении работников2 БЕ %BUSINESS_UNIT%.xlsx",
+                sourceSheetName  = "показатели расчет",
+                calculatedSheets = listOf(
+                    "л.1 расчет",
+                    "л.2 расчет",
+                    "Форма П-4",
+                    "Титул_П-4"
+                ),
+                sourceFormulaColumn = 5,
+                sourceValueColumn   = 6,
+                baseBusinessUnit    = 1000,
+                businessUnits       = listOf(),
+                dataFiles = listOf(
+                    DataFile(
+                        file = ru.fortum.forep.calculator.models.FileModel(
+                            name = "FOR_QLIK_BUKRS_ATTR_PBW",
+                            extension = "csv",
+                            "",
+                            ""
+                        )
+                    ),
+                    DataFile(
+                        file = ru.fortum.forep.calculator.models.FileModel(
+                            name = "FOR_QLIK_R03_OKVED_PBW",
+                            extension = "csv",
+                            "",
+                            ""
+                        )
+                    ),
+                    DataFile(
+                        file = ru.fortum.forep.calculator.models.FileModel(
+                            name = "FOR_QLIK_R03_PBW",
+                            extension = "csv",
+                            "",
+                            ""
+                        )
+                    ),
+                ),
+                businessUnitsPersonals = listOf()
+            )
+
+
             // 4
             val report04 = TemplateSettings(
                 calcType         = 4,
@@ -273,6 +324,8 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                 report01,
                 // 02
                 report02,
+                // 03
+                report03,
                 // 04
                 report04,
                 // 11
