@@ -129,7 +129,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                 templateName     = "3_Сведения_о_численности,_заработной_плате_и_движении_работников3.xlsx",
                 code             = "Сведения о численности",
                 outputDirectory  = "3_Сведения_о_численности,_заработной_плате_и_движении_работников3",
-                outputFileName   = "3 Сведения о численности, заработной_плате и движении работников3 БЕ %BUSINESS_UNIT%.xlsx",
+                outputFileName   = "Сведения о численности, заработной плате и движении работников3 БЕ %BUSINESS_UNIT%.xlsx",
                 sourceSheetName  = "показатели расчет",
                 calculatedSheets = listOf(
                     "л.2 расчет",

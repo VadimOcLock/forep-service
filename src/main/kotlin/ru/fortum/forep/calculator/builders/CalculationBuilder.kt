@@ -285,9 +285,10 @@ class Fqr03(
         }
     }
 
-    fun getZpersQty(): Double {
-        //TODO realization
-        return 0.0
+    fun getZpersQty(ztypeKf: String?, diapasonType: Int): Double {
+        return _fqrModels.filter {
+            it.ztypeKf == ztypeKf && it.fiscPer in getTimeRange(diapasonType)
+        }.sumOf { it.zpersQty }
     }
 
     // endregion

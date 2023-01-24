@@ -162,6 +162,11 @@ class FormulaParser(calculation: CalculationBuilder,
             {
                 return _calculation.fqr03.getZacOkved()
             }
+            if (m.execMethod == "zpersqty")
+            {
+                val parameters = parseParameters(m.parameters) ?: return null
+                return _calculation.fqr03.getZpersQty(parameters[0], parameters[1].toInt())
+            }
 
         }
         else if (m.execClass == FqrName04)
