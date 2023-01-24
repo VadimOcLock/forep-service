@@ -297,6 +297,12 @@ class Fqr03(
         }.sumOf { it.zwrkHrs }
     }
 
+    fun getAmount(ztypeKf: String?, diapasonType: Int): Double {
+        return _fqrModels.filter {
+            it.ztypeKf == ztypeKf && it.fiscPer in getTimeRange(diapasonType)
+        }.sumOf { it.amount }
+    }
+
     // endregion
 }
 

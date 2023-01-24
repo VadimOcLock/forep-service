@@ -172,7 +172,11 @@ class FormulaParser(calculation: CalculationBuilder,
                 val parameters = parseParameters(m.parameters) ?: return null
                 return _calculation.fqr03.getZwrkHrs(parameters[0], parameters[1].toInt())
             }
-
+            if (m.execMethod == "amount")
+            {
+                val parameters = parseParameters(m.parameters) ?: return null
+                return _calculation.fqr03.getAmount(parameters[0], parameters[1].toInt())
+            }
         }
         else if (m.execClass == FqrName04)
         {
