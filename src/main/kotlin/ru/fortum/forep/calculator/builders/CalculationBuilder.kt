@@ -247,13 +247,42 @@ class Fqr03(
 
     fun getZqtxext1(): String {
         val result = StringBuilder()
-        return if (_fqrModelsOKVED.isNotEmpty()) {
-            _fqrModelsOKVED.forEach {
-                result.append(it.zacOkved)
-                    .append(", ")
+
+        return when (_fqrModelsOKVED.size) {
+            0 -> "нет значений"
+            1 -> _fqrModelsOKVED.first().zqText1
+            else -> {
+                _fqrModelsOKVED.forEach {
+                    if (it == _fqrModelsOKVED.last()) {
+                        result.append(it.zqText1)
+                    } else {
+                        result.append(it.zqText1)
+                            .append(". ")
+                    }
+                }
+                result.toString()
             }
-            result.toString()
-        } else "нет значений"
+        }
+    }
+
+    fun getZacOkved(): String {
+        val result = StringBuilder()
+
+        return when (_fqrModelsOKVED.size) {
+            0 -> "нет значений"
+            1 -> _fqrModelsOKVED.first().zacOkved
+            else -> {
+                _fqrModelsOKVED.forEach {
+                    if (it == _fqrModelsOKVED.last()) {
+                        result.append(it.zacOkved)
+                    } else {
+                        result.append(it.zacOkved)
+                            .append(", ")
+                    }
+                }
+                result.toString()
+            }
+        }
     }
 
 

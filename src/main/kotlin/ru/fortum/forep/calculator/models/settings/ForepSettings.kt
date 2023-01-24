@@ -126,10 +126,10 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
                 isCalculated     = true,
                 isDebugMode      = true,
                 execDates        = listOf( "23.01"),
-                templateName     = "3_Сведения_о_численности,_заработной_плате_и_движении_работников2.xlsx",
+                templateName     = "3_Сведения_о_численности,_заработной_плате_и_движении_работников3.xlsx",
                 code             = "Сведения о численности",
-                outputDirectory  = "3_Сведения_о_численности,_заработной_плате_и_движении_работников2",
-                outputFileName   = "3 Сведения о численности, заработной_плате и движении работников2 БЕ %BUSINESS_UNIT%.xlsx",
+                outputDirectory  = "3_Сведения_о_численности,_заработной_плате_и_движении_работников3",
+                outputFileName   = "3 Сведения о численности, заработной_плате и движении работников3 БЕ %BUSINESS_UNIT%.xlsx",
                 sourceSheetName  = "показатели расчет",
                 calculatedSheets = listOf(
                     "л.2 расчет",

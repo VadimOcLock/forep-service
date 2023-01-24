@@ -156,8 +156,11 @@ class FormulaParser(calculation: CalculationBuilder,
         {
             if (m.execMethod == "zqtext1")
             {
-                val parameters = parseParameters(m.parameters) ?: return null
                 return _calculation.fqr03.getZqtxext1()
+            }
+            if (m.execMethod == "zacokved")
+            {
+                return _calculation.fqr03.getZacOkved()
             }
 
         }
