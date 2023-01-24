@@ -285,7 +285,10 @@ class Fqr03(
         }
     }
 
-
+    fun getZpersQty(): Double {
+        //TODO realization
+        return 0.0
+    }
 
     // endregion
 }
@@ -375,68 +378,7 @@ class Fqr04(
     // endregion
 
     // region methods
-    enum class DiapasonType(val diapasonIndex: Int) {
-        FIRST_MONTH_CURRENT_YEAR_TO_CURRENT_PERIOD(1),
-        CURRENT_PERIOD_CURRENT_YEAR(2),
-        FIRST_MONTH_PREVIOUS_YEAR_TO_CURRENT_PERIOD_PREVIOUS_YEAR(3),
-        CURRENT_PERIOD_PREVIOUS_YEAR(4)
-    }
 
-    private fun getTimeRange(diapasonIndex: Int): IntRange {
-        when (diapasonIndex) {
-            DiapasonType.FIRST_MONTH_CURRENT_YEAR_TO_CURRENT_PERIOD.diapasonIndex -> {
-                return getFiscBeginOfYear()..getFiscPeriodOfCurrentYear()
-            }
-
-            DiapasonType.CURRENT_PERIOD_CURRENT_YEAR.diapasonIndex -> {
-                return getFiscFirstMonthCurrentPeriod()..getFiscLastMonthCurrentPeriod()
-            }
-
-            DiapasonType.FIRST_MONTH_PREVIOUS_YEAR_TO_CURRENT_PERIOD_PREVIOUS_YEAR.diapasonIndex -> {
-                return getFiscFirstMonthPreviousYear()..getFiscLastMonthCurrentPeriodPreviousYear()
-            }
-
-            DiapasonType.CURRENT_PERIOD_PREVIOUS_YEAR.diapasonIndex -> {
-                return getFiscBeginCurrentPeriodPreviousYear()..getFiscLastMonthCurrentPeriodPreviousYear()
-            }
-
-            else -> throw IllegalStateException()
-        }
-    }
-
-    private fun getFiscBeginOfYear(): Int = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy001")).toInt()
-    private fun getFiscPeriodOfCurrentYear(): Int = getActualFiscPeriod()
-
-    private fun getFiscFirstMonthCurrentPeriod(): Int = getFiscMonthCurrentPeriod(2)
-
-    private fun getFiscLastMonthCurrentPeriod(): Int = getFiscMonthCurrentPeriod(0)
-
-    private fun getFiscMonthCurrentPeriod(index: Int): Int {
-        val beginPeriodMonth =
-            getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3 - index
-        return if (beginPeriodMonth < 10) LocalDate.now()
-            .format(DateTimeFormatter.ofPattern("yyy00${beginPeriodMonth}")).toInt()
-        else LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0${beginPeriodMonth}")).toInt()
-    }
-
-    private fun getFiscFirstMonthPreviousYear(): Int =
-        "${(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1)}001".toInt()
-
-    private fun getFiscLastMonthCurrentPeriodPreviousYear(): Int {
-        val previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
-        val lastMonthOfPeriod =
-            getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3
-        return if (lastMonthOfPeriod < 10) "${previousYear}00${lastMonthOfPeriod}".toInt()
-        else "${previousYear}0${lastMonthOfPeriod}".toInt()
-    }
-
-    private fun getFiscBeginCurrentPeriodPreviousYear(): Int {
-        val previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
-        val firstMonthOfPeriod =
-            getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3 - 2
-        return if (firstMonthOfPeriod < 10) "${previousYear}00${firstMonthOfPeriod}".toInt()
-        else "${previousYear}0${firstMonthOfPeriod}".toInt()
-    }
     // endregion
 }
 
@@ -502,6 +444,68 @@ private fun getActualFiscPeriod(): Int = LocalDate.now().format(
     )
 ).toInt()
 
+enum class DiapasonType(val diapasonIndex: Int) {
+    FIRST_MONTH_CURRENT_YEAR_TO_CURRENT_PERIOD(1),
+    CURRENT_PERIOD_CURRENT_YEAR(2),
+    FIRST_MONTH_PREVIOUS_YEAR_TO_CURRENT_PERIOD_PREVIOUS_YEAR(3),
+    CURRENT_PERIOD_PREVIOUS_YEAR(4)
+}
+
+private fun getTimeRange(diapasonIndex: Int): IntRange {
+    when (diapasonIndex) {
+        DiapasonType.FIRST_MONTH_CURRENT_YEAR_TO_CURRENT_PERIOD.diapasonIndex -> {
+            return getFiscBeginOfYear()..getFiscPeriodOfCurrentYear()
+        }
+
+        DiapasonType.CURRENT_PERIOD_CURRENT_YEAR.diapasonIndex -> {
+            return getFiscFirstMonthCurrentPeriod()..getFiscLastMonthCurrentPeriod()
+        }
+
+        DiapasonType.FIRST_MONTH_PREVIOUS_YEAR_TO_CURRENT_PERIOD_PREVIOUS_YEAR.diapasonIndex -> {
+            return getFiscFirstMonthPreviousYear()..getFiscLastMonthCurrentPeriodPreviousYear()
+        }
+
+        DiapasonType.CURRENT_PERIOD_PREVIOUS_YEAR.diapasonIndex -> {
+            return getFiscBeginCurrentPeriodPreviousYear()..getFiscLastMonthCurrentPeriodPreviousYear()
+        }
+
+        else -> throw IllegalStateException()
+    }
+}
+
+private fun getFiscBeginOfYear(): Int = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy001")).toInt()
+private fun getFiscPeriodOfCurrentYear(): Int = getActualFiscPeriod()
+
+private fun getFiscFirstMonthCurrentPeriod(): Int = getFiscMonthCurrentPeriod(2)
+
+private fun getFiscLastMonthCurrentPeriod(): Int = getFiscMonthCurrentPeriod(0)
+
+private fun getFiscMonthCurrentPeriod(index: Int): Int {
+    val beginPeriodMonth =
+        getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3 - index
+    return if (beginPeriodMonth < 10) LocalDate.now()
+        .format(DateTimeFormatter.ofPattern("yyy00${beginPeriodMonth}")).toInt()
+    else LocalDate.now().format(DateTimeFormatter.ofPattern("yyy0${beginPeriodMonth}")).toInt()
+}
+
+private fun getFiscFirstMonthPreviousYear(): Int =
+    "${(LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1)}001".toInt()
+
+private fun getFiscLastMonthCurrentPeriodPreviousYear(): Int {
+    val previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
+    val lastMonthOfPeriod =
+        getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3
+    return if (lastMonthOfPeriod < 10) "${previousYear}00${lastMonthOfPeriod}".toInt()
+    else "${previousYear}0${lastMonthOfPeriod}".toInt()
+}
+
+private fun getFiscBeginCurrentPeriodPreviousYear(): Int {
+    val previousYear = LocalDate.now().format(DateTimeFormatter.ofPattern("yyy")).toInt() - 1
+    val firstMonthOfPeriod =
+        getPeriodFromMonth(LocalDate.now().format(DateTimeFormatter.ofPattern("MM")).toInt()) * 3 - 2
+    return if (firstMonthOfPeriod < 10) "${previousYear}00${firstMonthOfPeriod}".toInt()
+    else "${previousYear}0${firstMonthOfPeriod}".toInt()
+}
 
 
 
