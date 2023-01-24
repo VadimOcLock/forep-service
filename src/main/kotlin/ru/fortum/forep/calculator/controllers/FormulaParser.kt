@@ -167,6 +167,11 @@ class FormulaParser(calculation: CalculationBuilder,
                 val parameters = parseParameters(m.parameters) ?: return null
                 return _calculation.fqr03.getZpersQty(parameters[0], parameters[1].toInt())
             }
+            if (m.execMethod == "zwrkhrs")
+            {
+                val parameters = parseParameters(m.parameters) ?: return null
+                return _calculation.fqr03.getZwrkHrs(parameters[0], parameters[1].toInt())
+            }
 
         }
         else if (m.execClass == FqrName04)
