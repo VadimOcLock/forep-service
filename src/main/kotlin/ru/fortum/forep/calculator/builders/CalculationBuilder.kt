@@ -172,7 +172,10 @@ class Fqr01(
             fiscMonth = 12 + curMonth - fiscMonth
         }
         curYear -= fiscYear
-        curMonth -= fiscMonth
+        if (curMonth > fiscMonth)
+            curMonth -= fiscMonth
+        else
+            curMonth = fiscMonth
         var curMonthStr = curMonth.toString()
         if (curMonth < 10) curMonthStr = "0$curMonthStr"
 
@@ -519,6 +522,3 @@ private fun getFiscBeginCurrentPeriodPreviousYear(): Int {
     return if (firstMonthOfPeriod < 10) "${previousYear}00${firstMonthOfPeriod}".toInt()
     else "${previousYear}0${firstMonthOfPeriod}".toInt()
 }
-
-
-
