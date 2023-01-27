@@ -131,15 +131,7 @@ class Fqr01(
         return result
     }
 
-    fun getZpersQty2(ztypeKf: String?, bus: List<Int>): Double {
-        val result = _models.filter {
-            it.ztypeKf.equals(ztypeKf, true) && bus.contains(it.compCode)
-        }.sumOf { it.zpersQty }
-
-        return result
-    }
-
-    fun getZpersQty3(ztypeKf: String?, fiscPerMCount: Int, bus: List<Int>): Double {
+    fun getZpersQty2(ztypeKf: String?, fiscPerMCount: Int, bus: List<Int>): Double {
         val fiscPer = fiscDate(fiscPerMCount)
 //       val fiscPer = 2022009
         val result = _models.filter {

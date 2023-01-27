@@ -122,20 +122,11 @@ class FormulaParser(calculation: CalculationBuilder,
             if (m.execMethod == "zpersqty2")
             {
                 val parameters = (parseParameters(m.parameters) ?: return null).toMutableList()
-                parameters[1] = parameters[1].replace("{", "")
-                parameters[parameters.size - 1] = parameters[parameters.size - 1].replace("}", "")
-                val bus = parameters.filter { it != parameters[0] }.map { it.toInt() }
-
-                return _calculation.fqr01.getZpersQty2(parameters[0], bus)
-            }
-            if (m.execMethod == "zpersqty3")
-            {
-                val parameters = (parseParameters(m.parameters) ?: return null).toMutableList()
                 parameters[2] = parameters[2].replace("{", "")
                 parameters[parameters.size - 1] = parameters[parameters.size - 1].replace("}", "")
                 val bus = parameters.filter { it != parameters[0] && it != parameters[1] }.map { it.toInt() }
 
-                return _calculation.fqr01.getZpersQty3(parameters[0], parameters[1].toInt(), bus)
+                return _calculation.fqr01.getZpersQty2(parameters[0], parameters[1].toInt(), bus)
             }
             if (m.execMethod == "zwrkhrs")
             {

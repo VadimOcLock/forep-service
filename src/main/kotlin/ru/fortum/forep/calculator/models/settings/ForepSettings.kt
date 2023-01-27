@@ -55,7 +55,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
             // 2
             val report02 = TemplateSettings(
                 calcType         = 2,
-                isCalculated     = true,
+                isCalculated     = false,
                 isDebugMode      = true,
                 execDates        = listOf( "13.01"),
                 templateName     = "2_Сведения_о_неполной_занятости_и_движении_работников.xlsx",
@@ -123,7 +123,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
             //3
             val report03 = TemplateSettings(
                 calcType         = 3,
-                isCalculated     = true,
+                isCalculated     = false,
                 isDebugMode      = true,
                 execDates        = listOf( "23.01"),
                 templateName     = "3_Сведения_о_численности,_заработной_плате_и_движении_работников3.xlsx",
@@ -201,7 +201,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
             // 4
             val report04 = TemplateSettings(
                 calcType         = 4,
-                isCalculated     = true,
+                isCalculated     = false,
                 isDebugMode      = true,
                 execDates        = listOf("14.12"),
                 templateName     = "4T_Форма_П_2_сведения_об_инвестициях_в_нефинансовые_активы_new.xlsx",
@@ -258,7 +258,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
             // 10
             val report101 = TemplateSettings(
                         calcType         = 10,
-                        isCalculated     = true,
+                        isCalculated     = false,
                         isDebugMode      = true,
                         execDates        = listOf( "03.25"),
                         templateName     = "10_Сведения о доходах и расходах.xlsx",
@@ -308,7 +308,7 @@ class ForepSettings(val common: CommonSettings = CommonSettings(
             // 11
             val report11 = TemplateSettings(
                         calcType            = 11,
-                        isCalculated        = true,
+                        isCalculated        = false,
                         isDebugMode         = true,
                         execDates           = listOf("03.25"),
                         templateName        = "11_Сведения_о_затратах_на_производство.xlsx",
